@@ -1,0 +1,35 @@
+2:I[4994,["186","static/chunks/186-bd66c251a786e84b.js","815","static/chunks/815-852de3a04eaa4c33.js","842","static/chunks/842-1cfa3a6575c1f5f3.js","308","static/chunks/app/blog/%5Bslug%5D/page-88bcdd648d9f62a6.js"],"default"]
+4:I[4707,[],""]
+6:I[6423,[],""]
+7:I[5498,["186","static/chunks/186-bd66c251a786e84b.js","833","static/chunks/833-adf5e23388f87f2b.js","185","static/chunks/app/layout-77b556b0dfa3b36e.js"],"QueryProvider"]
+8:I[5447,["186","static/chunks/186-bd66c251a786e84b.js","815","static/chunks/815-852de3a04eaa4c33.js","160","static/chunks/app/not-found-6b2d77edb825cbfb.js"],"default"]
+9:I[9556,["186","static/chunks/186-bd66c251a786e84b.js","833","static/chunks/833-adf5e23388f87f2b.js","185","static/chunks/app/layout-77b556b0dfa3b36e.js"],"Toaster"]
+3:T8f6,
+      <p>The regulatory landscape for artificial intelligence has evolved dramatically over the past few years, as governments and international bodies have worked to establish frameworks that balance innovation with safety, privacy, and ethical considerations.</p>
+      
+      <h2>Major Regulatory Frameworks</h2>
+      <p>Several jurisdictions have introduced comprehensive AI regulations aimed at ensuring responsible development and deployment of AI technologies:</p>
+      
+      <h3>1. The European Union: AI Act</h3>
+      <p>The EU AI Act classifies AI systems into risk categories—unacceptable, high-risk, and low-risk—and imposes varying levels of regulatory scrutiny based on these classifications.</p>
+      
+      <h3>2. United States: AI Bill of Rights and Executive Orders</h3>
+      <p>The U.S. has taken a sectoral approach to AI regulation, with federal guidelines emphasizing transparency, fairness, and human oversight in AI applications.</p>
+      
+      <h3>3. China: AI Governance and Social Stability</h3>
+      <p>China has introduced strict AI governance policies, particularly targeting deepfakes, algorithmic recommendations, and large-scale AI deployments.</p>
+      
+      <h3>4. Global AI Standards and International Cooperation</h3>
+      <p>Organizations like the OECD, United Nations, and G7 have worked to establish global AI governance principles emphasizing transparency, fairness, and international cooperation.</p>
+      
+      <h2>Industry Adaptation and Compliance</h2>
+      <p>AI companies have been adjusting their policies, development practices, and risk management strategies to comply with new regulations through responsible AI initiatives and increased focus on explainability.</p>
+      
+      <h2>Challenges and Future Outlook</h2>
+      <p>Despite progress, several challenges remain including regulatory fragmentation across jurisdictions, enforcement complexity, and the ongoing challenge of balancing innovation with responsible deployment.</p>
+      
+      <p>As AI continues to evolve, regulatory frameworks will need to adapt to emerging risks and opportunities, requiring collaboration between governments, industry leaders, and researchers to ensure AI develops in a way that is both ethical and beneficial to society.</p>
+    5:["slug","ai-regulation-landscape-2025","d"]
+0:["KX5h1tp4bS8LzzFfAFaZe",[[["",{"children":["blog",{"children":[["slug","ai-regulation-landscape-2025","d"],{"children":["__PAGE__?{\"slug\":\"ai-regulation-landscape-2025\"}",{}]}]}]},"$undefined","$undefined",true],["",{"children":["blog",{"children":[["slug","ai-regulation-landscape-2025","d"],{"children":["__PAGE__",{},[["$L1",["$","$L2",null,{"post":{"title":"AI Regulation Landscape in 2025: Global Policies and Industry Impact","date":"March 1, 2025","author":"Dr. Elena Kowalski","category":"AI Policy","readTime":"11 min read","image":"https://images.unsplash.com/photo-1589254065909-b7086229d08c?q=80&w=2000&h=1000&auto=format&fit=crop","content":"$3","relatedPosts":[{"title":"Ethical Considerations in Generative AI","category":"AI Ethics","image":"https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?q=80&w=600&h=400&auto=format&fit=crop","slug":"ethical-considerations-genai"},{"title":"The Future of AI Research: What's Next?","category":"Future of AI","image":"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&h=400&auto=format&fit=crop","slug":"future-of-ai-research"}]}}],null],null],null]},[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children","$5","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/71498e924b54e078.css","precedence":"next","crossOrigin":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/_next/static/css/7cca8e2c5137bd71.css","precedence":"next","crossOrigin":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__className_f367f3","children":[["$","$L7",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","$L8",null,{}],"notFoundStyles":[]}]}],["$","$L9",null,{}]]}]}]],null],null],["$La",null]]]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"NeuralPulse - AI, GenAI, Computer Vision & Deep Learning Blog"}],["$","meta","3",{"name":"description","content":"Exploring the frontiers of artificial intelligence, generative AI, computer vision, and deep learning."}],["$","meta","4",{"name":"generator","content":"v0.app"}],["$","meta","5",{"name":"next-size-adjust"}]]
+1:null
