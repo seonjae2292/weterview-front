@@ -90,7 +90,7 @@ export default function AboutPage() {
 
             <h2>Contact Us</h2>
             <p>
-              Have a question, suggestion, or want to collaborate? We'd love to hear from you! Reach out to us at{" "}
+              Have a question, suggestion, or want to collaborate? We&apos;d love to hear from you! Reach out to us at{" "}
               <a href="mailto:ameyaudeshmukh@gmail.com" className="text-purple-400 hover:text-purple-300">
                 ameyaudeshmukh@gmail.com
               </a>

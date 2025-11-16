@@ -338,7 +338,17 @@ export default function Home() {
   )
 }
 
-function FeaturedCard({ title, description, image, date, category, icon, slug = "" }) {
+interface FeaturedCardProps {
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+  category: string;
+  icon: React.ReactNode;
+  slug: string;
+}
+
+function FeaturedCard({ title, description, image, date, category, icon, slug = "" }: FeaturedCardProps) {
   return (
     <Card className="bg-gray-900 border-gray-800 overflow-hidden hover:border-purple-500/50 transition-colors">
       <div className="relative h-48">
@@ -367,7 +377,16 @@ function FeaturedCard({ title, description, image, date, category, icon, slug = 
   )
 }
 
-function ArticleCard({ title, description, category, date, slug = "", image }) {
+interface ArticleCardProps {
+  title: string;
+  description: string;
+  category: string;
+  date: string;
+  slug: string;
+  image: string;
+}
+
+function ArticleCard({ title, description, category, date, slug = "", image }: ArticleCardProps) {
   return (
     <Link href={`/blog/${slug}/`} className="group">
       <div className="space-y-3">

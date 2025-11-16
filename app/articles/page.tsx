@@ -252,7 +252,16 @@ export default function ArticlesPage() {
   )
 }
 
-function ArticleCard({ title, description, category, date, slug = "", image }) {
+interface ArticleCardProps {
+  title: string;
+  description: string;
+  category: string;
+  date: string;
+  slug: string;
+  image: string;
+}
+
+function ArticleCard({ title, description, category, date, slug = "", image }: ArticleCardProps) {
   return (
     <Link href={`/blog/${slug}/`} className="group">
       <div className="space-y-3">
