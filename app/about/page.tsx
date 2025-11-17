@@ -17,7 +17,7 @@ export default function AboutPage() {
       <header className="container mx-auto py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tighter">
-            Neural<span className="text-purple-500">Pulse</span>
+            Neural<span className="text-blue-500">Pulse</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm">
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">
@@ -35,7 +35,7 @@ export default function AboutPage() {
           </nav>
           <Button
             variant="outline"
-            className="border-purple-500 text-purple-500 hover:bg-purple-950 hover:text-white"
+            className="border-purple-500 text-blue-500 hover:bg-purple-950 hover:text-white"
             onClick={handleSubscribeClick}
           >
             Subscribe
@@ -105,7 +105,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <Link href="/" className="text-xl font-bold tracking-tighter">
-                Neural<span className="text-purple-500">Pulse</span>
+                Neural<span className="text-blue-500">Pulse</span>
               </Link>
               <p className="text-gray-400 text-sm">
                 Exploring the cutting edge of artificial intelligence and machine learning.

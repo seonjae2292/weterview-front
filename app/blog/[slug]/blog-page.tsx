@@ -86,11 +86,11 @@ export default function BlogPage({ post }: { post: Post }) {
       <header className="container mx-auto py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tighter">
-            Neural<span className="text-purple-500">Pulse</span>
+            Neural<span className="text-blue-500">Pulse</span>
           </Link>
           <Button
             variant="outline"
-            className="border-purple-500 text-purple-500 hover:bg-purple-950 hover:text-white"
+            className="border-purple-500 text-blue-500 hover:bg-purple-950 hover:text-white"
             onClick={() => {
               const newsletterSection = document.getElementById("newsletter")
               if (newsletterSection) {
@@ -110,7 +110,7 @@ export default function BlogPage({ post }: { post: Post }) {
             Back to articles
           </Link>
 
-          <div className="flex items-center gap-2 text-sm text-purple-500 mb-4">
+          <div className="flex items-center gap-2 text-sm text-blue-500 mb-4">
             <BrainCircuit className="h-5 w-5" />
             <span>{post.category}</span>
           </div>
@@ -196,7 +196,7 @@ export default function BlogPage({ post }: { post: Post }) {
                       />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 text-xs text-purple-500 mb-2">
+                      <div className="flex items-center gap-2 text-xs text-blue-500 mb-2">
                         <BrainCircuit className="h-4 w-4" />
                         <span>{relatedPost.category}</span>
                       </div>
@@ -214,7 +214,7 @@ export default function BlogPage({ post }: { post: Post }) {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <Link href="/" className="text-xl font-bold tracking-tighter">
-              Neural<span className="text-purple-500">Pulse</span>
+              Neural<span className="text-blue-500">Pulse</span>
             </Link>
             <p className="text-gray-400 text-sm mt-4 mb-6">
               Exploring the cutting edge of artificial intelligence and machine learning.

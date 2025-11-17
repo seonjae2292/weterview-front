@@ -102,7 +102,7 @@ export default function ArticlesPage() {
       <header className="container mx-auto py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tighter">
-            Neural<span className="text-purple-500">Pulse</span>
+            Neural<span className="text-blue-500">Pulse</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm">
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">
@@ -120,7 +120,7 @@ export default function ArticlesPage() {
           </nav>
           <Button
             variant="outline"
-            className="border-purple-500 text-purple-500 hover:bg-purple-950 hover:text-white"
+            className="border-purple-500 text-blue-500 hover:bg-purple-950 hover:text-white"
             onClick={handleSubscribeClick}
           >
             Subscribe
@@ -153,7 +153,7 @@ export default function ArticlesPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <Link href="/" className="text-xl font-bold tracking-tighter">
-                Neural<span className="text-purple-500">Pulse</span>
+                Neural<span className="text-blue-500">Pulse</span>
               </Link>
               <p className="text-gray-400 text-sm">
                 Exploring the cutting edge of artificial intelligence and machine learning.
@@ -269,7 +269,7 @@ function ArticleCard({ title, description, category, date, slug = "", image }: A
           <Image src={image || "/placeholder.svg"} alt={`${title} thumbnail`} fill className="object-cover" />
         </div>
         <div>
-          <div className="flex items-center gap-2 text-xs text-purple-500 mb-2">
+          <div className="flex items-center gap-2 text-xs text-blue-500 mb-2">
             <BrainCircuit className="h-4 w-4" />
             <span>{category}</span>
           </div>

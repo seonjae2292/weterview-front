@@ -42,10 +42,6 @@ export default function Home() {
       setEmail("")
       setIsSubmitting(false)
     }, 1000)
-
-    // For GitHub Pages, you could use a service like Formspree or a Google Form
-    // to collect emails without needing a backend
-    // Example: window.open(`https://formspree.io/f/yourformid?email=${encodeURIComponent(email)}`, '_blank')
   }
 
   return (
@@ -53,7 +49,7 @@ export default function Home() {
       <header className="container mx-auto py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tighter">
-            Neural<span className="text-purple-500">Pulse</span>
+            We<span className="text-blue-500">Terview</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm">
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">
@@ -71,7 +67,7 @@ export default function Home() {
           </nav>
           <Button
             variant="outline"
-            className="border-purple-500 text-purple-500 hover:bg-purple-950 hover:text-white"
+            className="border-blue-500 text-blue-500 hover:bg-blue-950 hover:text-white"
             onClick={scrollToNewsletter}
           >
             Subscribe
@@ -84,7 +80,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                Exploring the Frontiers of <span className="text-purple-500">Artificial Intelligence</span>
+                Exploring the Frontiers of <span className="text-blue-500">Artificial Intelligence</span>
               </h1>
               <p className="text-gray-400 text-lg md:text-xl">
                 Deep insights into AI, GenAI, Computer Vision, and Deep Learning advancements.
@@ -114,7 +110,7 @@ export default function Home() {
         <section className="mb-20">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold">Featured Articles</h2>
-            <Link href="/articles/" className="text-purple-500 hover:text-purple-400 text-sm flex items-center gap-2">
+            <Link href="/articles/" className="text-blue-500 hover:text-purple-400 text-sm flex items-center gap-2">
               View all <Eye className="h-4 w-4" />
             </Link>
           </div>
@@ -239,7 +235,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <Link href="/" className="text-xl font-bold tracking-tighter">
-                Neural<span className="text-purple-500">Pulse</span>
+                Neural<span className="text-blue-500">Pulse</span>
               </Link>
               <p className="text-gray-400 text-sm">
                 Exploring the cutting edge of artificial intelligence and machine learning.
@@ -355,7 +351,7 @@ function FeaturedCard({ title, description, image, date, category, icon, slug = 
         <Image src={image || "/placeholder.svg"} alt={title} fill className="object-cover" />
       </div>
       <CardHeader>
-        <div className="flex items-center gap-2 text-sm text-purple-500 mb-2">
+        <div className="flex items-center gap-2 text-sm text-blue-500 mb-2">
           {icon}
           <span>{category}</span>
         </div>
@@ -369,7 +365,7 @@ function FeaturedCard({ title, description, image, date, category, icon, slug = 
           <Clock className="h-4 w-4" />
           <span>{date}</span>
         </div>
-        <Link href={`/blog/${slug}/`} className="text-purple-500 hover:text-purple-400">
+        <Link href={`/blog/${slug}/`} className="text-blue-500 hover:text-purple-400">
           Read more →
         </Link>
       </CardFooter>
@@ -394,7 +390,7 @@ function ArticleCard({ title, description, category, date, slug = "", image }: A
           <Image src={image || "/placeholder.svg"} alt={`${title} thumbnail`} fill className="object-cover" />
         </div>
         <div>
-          <div className="flex items-center gap-2 text-xs text-purple-500 mb-2">
+          <div className="flex items-center gap-2 text-xs text-blue-500 mb-2">
             <BrainCircuit className="h-4 w-4" />
             <span>{category}</span>
           </div>

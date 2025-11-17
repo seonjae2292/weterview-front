@@ -65,7 +65,7 @@ export default function TopicsPage() {
       <header className="container mx-auto py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tighter">
-            Neural<span className="text-purple-500">Pulse</span>
+            Neural<span className="text-blue-500">Pulse</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm">
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">
@@ -74,7 +74,7 @@ export default function TopicsPage() {
             <Link href="/articles/" className="text-gray-400 hover:text-white transition-colors">
               Articles
             </Link>
-            <Link href="/topics/" className="text-white transition-colors border-b-2 border-purple-500 pb-1">
+            <Link href="/topics/" className="text-white transition-colors border-b-2 border-blue-500 pb-1">
               Topics
             </Link>
             <Link href="/about/" className="text-gray-400 hover:text-white transition-colors">
@@ -83,7 +83,7 @@ export default function TopicsPage() {
           </nav>
           <Button
             variant="outline"
-            className="border-purple-500 text-purple-500 hover:bg-purple-950 hover:text-white"
+            className="border-blue-500 text-blue-500 hover:bg-blue-950 hover:text-white"
             onClick={handleSubscribeClick}
           >
             Subscribe
@@ -115,7 +115,7 @@ export default function TopicsPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <Link href="/" className="text-xl font-bold tracking-tighter">
-                Neural<span className="text-purple-500">Pulse</span>
+                Neural<span className="text-blue-500">Pulse</span>
               </Link>
               <p className="text-gray-400 text-sm">
                 Exploring the cutting edge of artificial intelligence and machine learning.
@@ -225,19 +225,19 @@ interface TopicCardProps {
 function TopicCard({ title, description, icon, count, slug = "" }: TopicCardProps) {
   return (
     <Link href={`/articles/`} className="group">
-      <Card className="bg-gray-900 border-gray-800 hover:border-purple-500/50 transition-colors h-full">
+      <Card className="bg-gray-900 border-gray-800 hover:border-blue-500/50 transition-colors h-full">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <div className="bg-purple-500/10 p-3 rounded-lg text-purple-500">{icon}</div>
+            <div className="bg-blue-500/10 p-3 rounded-lg text-blue-500">{icon}</div>
             <div className="bg-gray-800 px-3 py-1 rounded-full text-sm">{count} articles</div>
           </div>
-          <CardTitle className="text-xl mt-4 group-hover:text-purple-400 transition-colors">{title}</CardTitle>
+          <CardTitle className="text-xl mt-4 group-hover:text-blue-400 transition-colors">{title}</CardTitle>
         </CardHeader>
         <CardContent>
           <CardDescription className="text-gray-400">{description}</CardDescription>
         </CardContent>
         <CardFooter>
-          <span className="text-purple-500 text-sm group-hover:text-purple-400 transition-colors">View articles →</span>
+          <span className="text-blue-500 text-sm group-hover:text-blue-400 transition-colors">View articles →</span>
         </CardFooter>
       </Card>
     </Link>
