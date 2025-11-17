@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useRef } from "react"
+import { KakaoLoginButton } from "../shared/kakao-login-button"
 
 export default function Header() {
   const newsletterRef = useRef<HTMLElement>(null)
@@ -31,13 +32,15 @@ export default function Header() {
             About
           </Link>
         </nav>
-        <Button
+        <div>
+          <KakaoLoginButton />
+        </div>
+        {/* <Button
           variant="outline"
           className="border-primary text-primary hover:bg-blue-950 hover:text-white"
           onClick={scrollToNewsletter}
         >
-          Subscribe
-        </Button>
+        </Button> */}
       </div>
     </header>
   )
