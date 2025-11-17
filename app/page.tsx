@@ -5,9 +5,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { BrainCircuit, Clock, Cpu, Eye, Github, Linkedin, Mail, Rss, Twitter } from "lucide-react"
+import { BrainCircuit, Cpu, Eye } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
+import FeaturedCard from "@/components/shared/featured-card"
+import ArticleCard from "@/components/shared/article-card"
 
 export default function Home() {
   const [email, setEmail] = useState("")
@@ -46,41 +47,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <header className="container mx-auto py-6">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold tracking-tighter">
-            We<span className="text-blue-500">Terview</span>
-          </Link>
-          <nav className="hidden md:flex items-center space-x-6 text-sm">
-            <Link href="/" className="text-gray-400 hover:text-white transition-colors">
-              Home
-            </Link>
-            <Link href="/articles/" className="text-gray-400 hover:text-white transition-colors">
-              Articles
-            </Link>
-            <Link href="/topics/" className="text-gray-400 hover:text-white transition-colors">
-              Topics
-            </Link>
-            <Link href="/about/" className="text-gray-400 hover:text-white transition-colors">
-              About
-            </Link>
-          </nav>
-          <Button
-            variant="outline"
-            className="border-blue-500 text-blue-500 hover:bg-blue-950 hover:text-white"
-            onClick={scrollToNewsletter}
-          >
-            Subscribe
-          </Button>
-        </div>
-      </header>
-
       <main className="container mx-auto px-4 py-12">
         <section className="mb-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                Exploring the Frontiers of <span className="text-blue-500">Artificial Intelligence</span>
+                Exploring the Frontiers of <span className="text-primary">Artificial Intelligence</span>
               </h1>
               <p className="text-gray-400 text-lg md:text-xl">
                 Deep insights into AI, GenAI, Computer Vision, and Deep Learning advancements.
@@ -110,7 +82,7 @@ export default function Home() {
         <section className="mb-20">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold">Featured Articles</h2>
-            <Link href="/articles/" className="text-blue-500 hover:text-purple-400 text-sm flex items-center gap-2">
+            <Link href="/articles/" className="text-primary hover:text-primary text-sm flex items-center gap-2">
               View all <Eye className="h-4 w-4" />
             </Link>
           </div>
@@ -213,7 +185,7 @@ export default function Home() {
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="bg-black border-gray-800 focus-visible:ring-purple-500"
+                className="bg-black border-gray-800 focus-visible:ring-primary"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -229,179 +201,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-
-      <footer className="border-t border-gray-800 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <Link href="/" className="text-xl font-bold tracking-tighter">
-                Neural<span className="text-blue-500">Pulse</span>
-              </Link>
-              <p className="text-gray-400 text-sm">
-                Exploring the cutting edge of artificial intelligence and machine learning.
-              </p>
-              <div className="flex space-x-4">
-                <Link href="#" className="text-gray-400 hover:text-white">
-                  <Twitter className="h-5 w-5" />
-                </Link>
-                <Link href="#" className="text-gray-400 hover:text-white">
-                  <Github className="h-5 w-5" />
-                </Link>
-                <Link href="#" className="text-gray-400 hover:text-white">
-                  <Linkedin className="h-5 w-5" />
-                </Link>
-                <Link href="#" className="text-gray-400 hover:text-white">
-                  <Rss className="h-5 w-5" />
-                </Link>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Topics</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Artificial Intelligence
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Generative AI
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Computer Vision
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Deep Learning
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Machine Learning
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Resources</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Tutorials
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Research Papers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Code Samples
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Datasets
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white">
-                    Tools
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Contact</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  <span>ameyaudeshmukh@gmail.com</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-12 pt-6 text-sm text-gray-400">
-            <p>© {new Date().getFullYear()} NeuralPulse. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
-  )
-}
-
-interface FeaturedCardProps {
-  title: string;
-  description: string;
-  image: string;
-  date: string;
-  category: string;
-  icon: React.ReactNode;
-  slug: string;
-}
-
-function FeaturedCard({ title, description, image, date, category, icon, slug = "" }: FeaturedCardProps) {
-  return (
-    <Card className="bg-gray-900 border-gray-800 overflow-hidden hover:border-purple-500/50 transition-colors">
-      <div className="relative h-48">
-        <Image src={image || "/placeholder.svg"} alt={title} fill className="object-cover" />
-      </div>
-      <CardHeader>
-        <div className="flex items-center gap-2 text-sm text-blue-500 mb-2">
-          {icon}
-          <span>{category}</span>
-        </div>
-        <CardTitle className="text-xl">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription className="text-gray-400">{description}</CardDescription>
-      </CardContent>
-      <CardFooter className="flex justify-between text-sm text-gray-500">
-        <div className="flex items-center gap-1">
-          <Clock className="h-4 w-4" />
-          <span>{date}</span>
-        </div>
-        <Link href={`/blog/${slug}/`} className="text-blue-500 hover:text-purple-400">
-          Read more →
-        </Link>
-      </CardFooter>
-    </Card>
-  )
-}
-
-interface ArticleCardProps {
-  title: string;
-  description: string;
-  category: string;
-  date: string;
-  slug: string;
-  image: string;
-}
-
-function ArticleCard({ title, description, category, date, slug = "", image }: ArticleCardProps) {
-  return (
-    <Link href={`/blog/${slug}/`} className="group">
-      <div className="space-y-3">
-        <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-purple-500/50 transition-colors">
-          <Image src={image || "/placeholder.svg"} alt={`${title} thumbnail`} fill className="object-cover" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2 text-xs text-blue-500 mb-2">
-            <BrainCircuit className="h-4 w-4" />
-            <span>{category}</span>
-          </div>
-          <h3 className="font-medium group-hover:text-purple-400 transition-colors">{title}</h3>
-          <p className="text-gray-400 text-sm mt-2 line-clamp-2">{description}</p>
-          <div className="flex items-center gap-1 mt-3 text-xs text-gray-500">
-            <Clock className="h-3 w-3" />
-            <span>{date}</span>
-          </div>
-        </div>
-      </div>
-    </Link>
   )
 }

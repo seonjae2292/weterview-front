@@ -86,11 +86,11 @@ export default function BlogPage({ post }: { post: Post }) {
       <header className="container mx-auto py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tighter">
-            Neural<span className="text-blue-500">Pulse</span>
+            Neural<span className="text-primary">Pulse</span>
           </Link>
           <Button
             variant="outline"
-            className="border-purple-500 text-blue-500 hover:bg-purple-950 hover:text-white"
+            className="border-primary text-primary hover:bg-purple-950 hover:text-white"
             onClick={() => {
               const newsletterSection = document.getElementById("newsletter")
               if (newsletterSection) {
@@ -110,7 +110,7 @@ export default function BlogPage({ post }: { post: Post }) {
             Back to articles
           </Link>
 
-          <div className="flex items-center gap-2 text-sm text-blue-500 mb-4">
+          <div className="flex items-center gap-2 text-sm text-primary mb-4">
             <BrainCircuit className="h-5 w-5" />
             <span>{post.category}</span>
           </div>
@@ -187,7 +187,7 @@ export default function BlogPage({ post }: { post: Post }) {
               {post.relatedPosts.map((relatedPost, index) => (
                 <Link href={`/blog/${relatedPost.slug}/`} className="group" key={index}>
                   <div className="space-y-3">
-                    <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-purple-500/50 transition-colors">
+                    <div className="relative h-48 rounded-lg overflow-hidden border border-gray-800 group-hover:border-primary/50 transition-colors">
                       <Image
                         src={relatedPost.image || "/placeholder.svg"}
                         alt={`${relatedPost.title} thumbnail`}
@@ -196,11 +196,11 @@ export default function BlogPage({ post }: { post: Post }) {
                       />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 text-xs text-blue-500 mb-2">
+                      <div className="flex items-center gap-2 text-xs text-primary mb-2">
                         <BrainCircuit className="h-4 w-4" />
                         <span>{relatedPost.category}</span>
                       </div>
-                      <h3 className="font-medium group-hover:text-purple-400 transition-colors">{relatedPost.title}</h3>
+                      <h3 className="font-medium group-hover:text-primary transition-colors">{relatedPost.title}</h3>
                     </div>
                   </div>
                 </Link>
@@ -214,7 +214,7 @@ export default function BlogPage({ post }: { post: Post }) {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <Link href="/" className="text-xl font-bold tracking-tighter">
-              Neural<span className="text-blue-500">Pulse</span>
+              Neural<span className="text-primary">Pulse</span>
             </Link>
             <p className="text-gray-400 text-sm mt-4 mb-6">
               Exploring the cutting edge of artificial intelligence and machine learning.
