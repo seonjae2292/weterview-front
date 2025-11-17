@@ -2,10 +2,6 @@ node_modules/
 .next/
 .github/
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .vscode/
 .idea/
 npm-debug.log*
@@ -15,3 +11,6 @@ pnpm-debug.log*
 dist/
 build/
 out/
+
+# environment variables
+.env.development
