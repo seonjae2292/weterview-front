@@ -32,15 +32,15 @@ import { useCheckNickname, useSignup } from "@/hooks/queries/use-auth";
 
 // 유효성 검사 스키마
 const signupSchema = z.object({
-  realName: z.string().min(2, "이름은 2글자 이상이어야 합니다."),
+  kakaoUserNumber: z.string(), // 카카오 고유번호
+  kakoEmail: z.string(),
   nickname: z.string().min(2, "별명은 2글자 이상이어야 합니다."),
-  birthDate: z.date({ error: "생년월일을 선택해주세요." }),
   gender: z.enum(["MALE", "FEMALE"] as const, { message: "성별을 선택해주세요." }),
+  // birthDate: z.date({ error: "생년월일을 선택해주세요." }),
 });
 
 function SignupForm() {
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
   const { toast } = useToast();
   
   const { mutate: signup, isPending: isSigningUp } = useSignup();
@@ -51,7 +51,8 @@ function SignupForm() {
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      realName: "",
+      kakaoUserNumber: "",
+      kakoEmail: "",
       nickname: "",
       gender: "MALE",
     },
@@ -88,10 +89,23 @@ function SignupForm() {
       return;
     }
 
+    const kakaoEmail = localStorage.getItem("kakaoEmail") || "";
+    if(kakaoEmail === "") {
+      toast({ title: "카카오 이메일 정보가 없습니다. 다시 시도해주세요.", variant: "destructive" });
+      return;
+    }
+
+    const kakaoUserNumber = localStorage.getItem("kakaoUserNumber") || "";
+    if(kakaoUserNumber === "") {
+      toast({ title: "카카오 고유번호 정보가 없습니다. 다시 시도해주세요.", variant: "destructive" });
+      return;
+    }
+    
     signup({
       ...values,
-      birthDate: format(values.birthDate, "yyyy-MM-dd"),
-      email, 
+      kakaoEmail,
+      kakaoUserNumber
+      // birthDate: format(values.birthDate, "yyyy-MM-dd"),
     });
   };
 
@@ -105,21 +119,6 @@ function SignupForm() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* 이름 */}
-            <FormField
-              control={form.control}
-              name="realName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>실명</FormLabel>
-                  <FormControl>
-                    <Input placeholder="홍길동" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* 별명 (중복확인 포함) */}
             <FormField
               control={form.control}
@@ -153,8 +152,8 @@ function SignupForm() {
               )}
             />
 
-            {/* 생년월일 (Calendar) */}
-            <FormField
+            {/* TODO 생년월일 (Calendar) */}
+            {/* <FormField
               control={form.control}
               name="birthDate"
               render={({ field }) => (
@@ -198,7 +197,7 @@ function SignupForm() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* 성별 */}
             <FormField

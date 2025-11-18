@@ -5,18 +5,17 @@ export interface ApiResponse<T> {
 }
 
 export interface OurMemberDto {
-  id: number;
-  email: string;
+  kakaoUniqueId: string;
+  kakaoEmail: string;
   name: string;
-  role: "GUEST" | "USER";
+  isOurMember: boolean;
   accessToken: string;
   refreshToken: string;
 }
-
 export interface SignupInfoDto {
-  realName: string;
+  kakaoUserNumber: string;
+  kakaoEmail: string;
   nickname: string;
-  birthDate: string; // YYYY-MM-DD
   gender: "MALE" | "FEMALE";
-  email: string;
+  // birthDate: string; // YYYY-MM-DD
 }

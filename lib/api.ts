@@ -9,6 +9,7 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
   });
 
   if (!res.ok) {
+    console.log("API call failed:", res.status, res.statusText);
     throw new Error("API call failed");
   }
   return res.json();
