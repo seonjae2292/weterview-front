@@ -83,26 +83,6 @@ export default function BlogPage({ post }: { post: Post }) {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <header className="container mx-auto py-6">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold tracking-tighter">
-            Neural<span className="text-primary">Pulse</span>
-          </Link>
-          <Button
-            variant="outline"
-            className="border-primary text-primary hover:bg-purple-950 hover:text-white"
-            onClick={() => {
-              const newsletterSection = document.getElementById("newsletter")
-              if (newsletterSection) {
-                newsletterSection.scrollIntoView({ behavior: "smooth" })
-              }
-            }}
-          >
-            Subscribe
-          </Button>
-        </div>
-      </header>
-
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
           <Link href="/articles/" className="inline-flex items-center text-gray-400 hover:text-white mb-8">
@@ -209,33 +189,6 @@ export default function BlogPage({ post }: { post: Post }) {
           </div>
         </div>
       </main>
-
-      <footer className="border-t border-gray-800 py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <Link href="/" className="text-xl font-bold tracking-tighter">
-              Neural<span className="text-primary">Pulse</span>
-            </Link>
-            <p className="text-gray-400 text-sm mt-4 mb-6">
-              Exploring the cutting edge of artificial intelligence and machine learning.
-            </p>
-            <div className="flex justify-center space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white">
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white">
-                <Facebook className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white">
-                <Linkedin className="h-5 w-5" />
-              </Link>
-            </div>
-            <div className="border-t border-gray-800 mt-8 pt-6 text-sm text-gray-400">
-              <p>© {new Date().getFullYear()} NeuralPulse. All rights reserved.</p>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
