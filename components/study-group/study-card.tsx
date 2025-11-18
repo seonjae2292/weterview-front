@@ -30,7 +30,7 @@ export function StudyCard({ id, data }: StudyCardProps) {
   };
 
   return (
-    <Link href={`/study-groups/${id}`}>
+    <Link href={`/study-groups/detail?id=${id}`}>
       <Card className="h-full flex flex-col bg-gray-900 border-gray-800 hover:border-primary/50 transition-colors overflow-hidden group">
         <CardHeader className="pb-3">
           <div className="flex justify-between items-start mb-2">

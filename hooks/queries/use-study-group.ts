@@ -9,7 +9,7 @@ import {
   StudyGroupDetailDto, 
   CommentDto 
 } from "@/types/study-group";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { CreateStudyGroupReq } from "@/types/study-group";
 

@@ -14,16 +14,17 @@ export interface PageResponse<T> {
 
 // 목록 조회용 아이템 (GetStudyGroupPageRes)
 export interface StudyGroupItemDto {
-  field: string;        // Enum
-  status: string;       // Enum
+  id?: number | string; // 백엔드 DTO 확인 필요, 없을 경우 대비
+  field: string;
+  status: string;
   title: string;
   subTitle: string;
-  location: string;     // Enum
+  location: string;
   description: string;
   recruitingNumber: number;
   totalNumber: number;
-  startDate: string;    // LocalDateTime ISO String
-  endDate: string;      // LocalDateTime ISO String
+  startDate: string;
+  endDate: string;
 }
 
 // 상세 조회용 (GetStudyGroupByIdRes / GetStudyGroupDetailRes)
@@ -86,19 +87,30 @@ export interface CreateStudyGroupSchema {
   contact: string;
 }
 
+// 스터디 생성 요청 (CreateStudyGroupReq)
 export interface CreateStudyGroupReq {
-  field: string;        // Enum (FINANCE, IT, OFFICE)
+  field: string;
   title: string;
   subTitle: string;
   recruitingNumber: number;
   totalNumber: number;
-  startDate: string;    // ISO 8601 String (yyyy-MM-ddTHH:mm:ss)
-  endDate: string;      // ISO 8601 String
-  location: string;     // Enum (SEOUL, BUSAN, ...)
+  startDate: string; // yyyy-MM-ddTHH:mm:ss
+  endDate: string;   // yyyy-MM-ddTHH:mm:ss
+  location: string;
   description: string;
   schedule: string;
   joinCondition: string;
   contact: string;
+}
+
+// 검색 파라미터
+export interface StudyGroupSearchParams {
+  pageNumber: number;
+  pageSize: number;
+  title?: string;
+  field?: string;
+  location?: string;
+  status?: string;
 }
 
 // 스터디 수정 요청 DTO (UpdateStudyGroupReq)
@@ -116,4 +128,15 @@ export interface UpdateStudyGroupReq {
   joinCondition?: string;
   contact?: string;
   status?: string; // RECRUITING, CLOSED, DELETED
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
 }
