@@ -19,7 +19,7 @@ export default function Header() {
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm">
           <Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
-          <Link href="/articles/" className="text-gray-400 hover:text-white transition-colors">Articles</Link>
+          <Link href="/study-groups/" className="text-gray-400 hover:text-white transition-colors">게시글</Link>
           <Link href="/topics/" className="text-gray-400 hover:text-white transition-colors">Topics</Link>
           <Link href="/about/" className="text-gray-400 hover:text-white transition-colors">About</Link>
         </nav>
