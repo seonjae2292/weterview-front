@@ -19,3 +19,12 @@ export interface SignupInfoDto {
   gender: "MALE" | "FEMALE";
   // birthDate: string; // YYYY-MM-DD
 }
+
+// 마이페이지 정보 응답 타입
+export interface MyPageInfoDto {
+  createdAt: string;    // LocalDateTime은 JSON string으로 옴 (ISO 8601)
+  updatedAt: string;    // LocalDateTime
+  kakaoEmail: string;
+  nickname: string;
+  gender: string;       // "MALE" | "FEMALE"
+}

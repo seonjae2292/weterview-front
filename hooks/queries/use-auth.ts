@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ApiResponse, OurMemberDto, SignupInfoDto, MyPageInfoDto } from "@/types/auth";
 import { fetcher } from "@/lib/api";
-import { ApiResponse, OurMemberDto, SignupInfoDto } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -9,12 +9,15 @@ export const useKakaoLogin = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (code: string) =>
       fetcher<ApiResponse<OurMemberDto>>(`/oauth/kakao/callback?code=${code}`, {
         method: "GET",
+        auth: false, // 토큰이 없으므로 인증 없이 요청
       }),
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       // 응답 데이터 구조 확인 로그
       console.log("Login Success Response:", response);
 
@@ -34,6 +37,8 @@ export const useKakaoLogin = () => {
       } else {
         localStorage.removeItem("kakaoEmail");
         localStorage.removeItem("kakaoUserNumber");
+
+        await queryClient.invalidateQueries({ queryKey: ["myProfile"] });
 
         toast({ title: "로그인 성공", description: "환영합니다!" });
         
@@ -62,6 +67,7 @@ export const useCheckNickname = () => {
     mutationFn: (nickname: string) =>
       fetcher<ApiResponse<Record<string, boolean>>>(`/oauth/verify/duplicate/nickname?nickname=${nickname}`, {
         method: "GET",
+        auth: false,
       }),
   });
 };
@@ -75,6 +81,7 @@ export const useSignup = () => {
     mutationFn: (data: SignupInfoDto) =>
       fetcher<ApiResponse<any>>("/oauth/signup", {
         method: "POST",
+        auth: false,
         body: JSON.stringify(data),
       }),
     onSuccess: () => {
@@ -88,4 +95,45 @@ export const useSignup = () => {
       toast({ title: "회원가입 실패", description: "입력 정보를 확인해주세요.", variant: "destructive" });
     },
   });
+};
+
+// 내 정보 조회 (토큰 필수 -> auth: true / 생략 가능하지만 명시 권장)
+export const useMyProfile = () => {
+  return useQuery({
+    queryKey: ["myProfile"],
+    queryFn: async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return null; // 토큰 없으면 요청 안 함
+
+      const response = await fetcher<ApiResponse<MyPageInfoDto>>("/mypage/info", {
+        method: "GET",
+        auth: true, // [중요] 토큰 필수
+      });
+      return response.data;
+    },
+    staleTime: 1000 * 60 * 10, // 10분간 캐시 유지
+    retry: 0, // 인증 에러 시 재시도 하지 않음
+  });
+};
+
+// 로그아웃 로직 (API 호출 없이 클라이언트 처리)
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("kakaoEmail");
+    localStorage.removeItem("kakaoUserNumber");
+    
+    // 유저 데이터 캐시 즉시 삭제 (UI 즉시 반영을 위해)
+    queryClient.setQueryData(["myProfile"], null);
+    queryClient.invalidateQueries({ queryKey: ["myProfile"] });
+
+    toast({ title: "로그아웃 되었습니다." });
+    router.push("/");
+  };
+
+  return { logout };
 };
