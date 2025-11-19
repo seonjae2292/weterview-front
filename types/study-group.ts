@@ -54,17 +54,6 @@ export interface CommentDto {
   createdAt: string;
   nickname: string;
 }
-
-// 검색 요청 파라미터
-export interface StudyGroupSearchParams {
-  pageNumber: number; // 1-based
-  pageSize: number;
-  title?: string;
-  field?: string;
-  location?: string;
-  status?: string;
-}
-
 export interface StudyGroupCommentDto {
   nickname: string;
   content: string;
