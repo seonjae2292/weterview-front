@@ -13,6 +13,29 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { CreateStudyGroupReq } from "@/types/study-group";
 
+// 게시글 생성
+export const useCreateStudyGroup = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateStudyGroupReq) => 
+      fetcher("/studygroup/create", {
+        method: "POST",
+        auth: true,
+        body: JSON.stringify(data)
+      }),
+    onSuccess: () => {
+      toast({ title: "스터디가 개설되었습니다." });
+      queryClient.invalidateQueries({ queryKey: ["studyGroups"] });
+      // 생성 후 목록으로 이동하거나, 응답에 id가 있다면 상세 페이지로 이동
+      router.push("/study-groups"); 
+    },
+    onError: (err) => toast({ title: "개설 실패", description: err.message, variant: "destructive" })
+  });
+};
+
 // 목록 조회
 export const useGetStudyGroups = (params: StudyGroupSearchParams) => {
   return useQuery({
@@ -30,7 +53,7 @@ export const useGetStudyGroups = (params: StudyGroupSearchParams) => {
 
       const res = await fetcher<ApiResponse<PageResponse<StudyGroupItemDto>>>(
         `/studygroup/get?${query.toString()}`, 
-        { method: "GET", auth: false } // 목록 조회는 토큰 없이 가능하면 false, 필수면 true
+        { method: "GET", auth: true } // 목록 조회는 토큰 없이 가능하면 false, 필수면 true
       );
       return res.data;
     },
@@ -60,7 +83,7 @@ export const useGetComments = (id: string) => {
     queryFn: async () => {
       const res = await fetcher<ApiResponse<CommentDto[]>>(
         `/studygroup/get/comment/${id}`, 
-        { method: "GET", auth: true }
+        { method: "GET", auth: false }
       );
       return res.data;
     },
@@ -106,27 +129,6 @@ export const useJoinStudyGroup = () => {
   });
 };
 
-export const useCreateStudyGroup = () => {
-  const router = useRouter();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data: CreateStudyGroupReq) => 
-      fetcher("/studygroup/create", {
-        method: "POST",
-        auth: true,
-        body: JSON.stringify(data)
-      }),
-    onSuccess: () => {
-      toast({ title: "스터디가 개설되었습니다." });
-      queryClient.invalidateQueries({ queryKey: ["studyGroups"] });
-      // 생성 후 목록으로 이동하거나, 응답에 id가 있다면 상세 페이지로 이동
-      router.push("/study-groups"); 
-    },
-    onError: (err) => toast({ title: "개설 실패", description: err.message, variant: "destructive" })
-  });
-};
 
 // 스터디 삭제
 export const useDeleteStudyGroup = () => {
