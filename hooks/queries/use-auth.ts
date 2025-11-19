@@ -3,6 +3,7 @@ import { ApiResponse, OurMemberDto, SignupInfoDto, MyPageInfoDto } from "@/types
 import { fetcher } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { deleteAccessToken, getAccessToken, setAccessToken } from "@/lib/utils";
 
 // 카카오 로그인 (Callback 처리)
 export const useKakaoLogin = () => {
@@ -23,9 +24,7 @@ export const useKakaoLogin = () => {
 
       const { isOurMember, accessToken, kakaoEmail, kakaoUniqueId} = response.data;
       
-      if (accessToken) {
-        localStorage.setItem("accessToken", accessToken);
-      }
+      if (accessToken) setAccessToken(accessToken);
 
       if (!isOurMember) {
         localStorage.setItem("kakaoEmail", kakaoEmail);
@@ -102,7 +101,7 @@ export const useMyProfile = () => {
   return useQuery({
     queryKey: ["myProfile"],
     queryFn: async () => {
-      const token = localStorage.getItem("accessToken");
+      const token = getAccessToken();
       if (!token) return null; // 토큰 없으면 요청 안 함
 
       const response = await fetcher<ApiResponse<MyPageInfoDto>>("/mypage/info", {
@@ -123,7 +122,7 @@ export const useLogout = () => {
   const { toast } = useToast();
 
   const logout = () => {
-    localStorage.removeItem("accessToken");
+    deleteAccessToken();
     localStorage.removeItem("kakaoEmail");
     localStorage.removeItem("kakaoUserNumber");
     

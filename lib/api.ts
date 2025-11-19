@@ -1,3 +1,6 @@
+import { get } from "http";
+import { getAccessToken } from "./utils";
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type FetcherOptions = RequestInit & { auth?: boolean };
@@ -12,7 +15,7 @@ export async function fetcher<T>(endpoint: string, options: FetcherOptions = {})
   };
 
   if (auth) {
-    const token = localStorage.getItem("accessToken");
+    const token = getAccessToken();
     if (token) {
       (finalHeaders as any)["Authorization"] = `Bearer ${token}`;
     } else {
