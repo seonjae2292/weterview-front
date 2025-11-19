@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -10,9 +8,6 @@ const nextConfig = {
       },
     ],
   },
-  // For GitHub Pages deployment
-  basePath: process.env.NODE_ENV === "production" ? "" : "",
-  trailingSlash: true,
 }
 
 module.exports = nextConfig

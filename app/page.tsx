@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,12 +10,15 @@ import { StudyCard } from "@/components/study-group/study-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FEATURED_STUDY_GROUPS } from "@/constants/mock";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const newsletterRef = useRef<HTMLElement>(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   // 최신 스터디 조회 (1페이지, 6개)
   const { data: recentData, isLoading: isRecentLoading } = useGetStudyGroups({
@@ -47,6 +50,23 @@ export default function Home() {
       setIsSubmitting(false);
     }, 1000);
   };
+
+  // [Auth Guard] 미들웨어 리다이렉트 감지
+  useEffect(() => {
+    const alertType = searchParams.get("alert");
+
+    if (alertType === "login_required") {
+      setTimeout(() => {
+        toast({
+          title: "로그인이 필요한 서비스입니다.",
+          description: "로그인 후 이용해주세요.",
+          variant: "destructive",
+        });
+      }, 0);
+
+      router.replace("/", { scroll: false });
+    }
+  }, [searchParams, toast, router]);
 
   return (
     <div className="min-h-screen bg-black text-white">
