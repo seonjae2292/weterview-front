@@ -102,23 +102,6 @@ export interface StudyGroupSearchParams {
   status?: string;
 }
 
-// 스터디 수정 요청 DTO (UpdateStudyGroupReq)
-export interface UpdateStudyGroupReq {
-  field?: string;
-  title?: string;
-  subTitle?: string;
-  recruitingNumber?: number;
-  totalNumber?: number;
-  startDate?: string;
-  endDate?: string;
-  location?: string;
-  description?: string;
-  schedule?: string;
-  joinCondition?: string;
-  contact?: string;
-  status?: string; // RECRUITING, CLOSED, DELETED
-}
-
 export interface PageResponse<T> {
   content: T[];
   totalPages: number;
@@ -128,4 +111,18 @@ export interface PageResponse<T> {
   first: boolean;
   last: boolean;
   empty: boolean;
+}
+
+// 신청자 관리용 DTO
+export interface StudyApplicantDto {
+  userId: number;
+  nickname: string;
+  kakaoEmail: string; // 연락처 대용
+  createdAt: string;
+  status: "APPLY" | "ACCEPT" | "REFUSE";
+}
+
+// 수정용 DTO (기존 CreateStudyGroupReq와 유사하지만 status 포함 가능)
+export interface UpdateStudyGroupReq extends Partial<CreateStudyGroupReq> {
+  status?: "RECRUITING" | "CLOSED" | "DELETED";
 }

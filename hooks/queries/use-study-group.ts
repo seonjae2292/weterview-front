@@ -11,7 +11,7 @@ import {
 } from "@/types/study-group";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { CreateStudyGroupReq } from "@/types/study-group";
+import { CreateStudyGroupReq, UpdateStudyGroupReq } from "@/types/study-group";
 
 // 게시글 생성
 export const useCreateStudyGroup = () => {
@@ -119,10 +119,9 @@ export const useJoinStudyGroup = () => {
   const { toast } = useToast();
   return useMutation({
     mutationFn: (studyGroupId: string) => 
-      fetcher("/studygroup/join", {
+      fetcher(`/studygroup/join/${studyGroupId}`, {
         method: "POST",
         auth: true,
-        body: JSON.stringify({ studyGroupId })
       }),
     onSuccess: () => toast({ title: "참여 신청이 완료되었습니다." }),
     onError: (error: any) => toast({ title: "신청 실패", description: error.message, variant: "destructive" })
@@ -167,5 +166,27 @@ export const useCreateComment = (studyGroupId: string) => {
       toast({ title: "댓글이 등록되었습니다." });
     },
     onError: (err) => toast({ title: "댓글 등록 실패", description: err.message, variant: "destructive" })
+  });
+};
+
+// 스터디 수정
+export const useUpdateStudyGroup = (id: string) => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: UpdateStudyGroupReq) => 
+      fetcher(`/studygroup/update/${id}`, {
+        method: "PATCH",
+        auth: true,
+        body: JSON.stringify(data)
+      }),
+    onSuccess: () => {
+      toast({ title: "수정되었습니다." });
+      queryClient.invalidateQueries({ queryKey: ["studyGroup", id] });
+      router.push(`/study-groups/detail?id=${id}`);
+    },
+    onError: (err) => toast({ title: "수정 실패", description: err.message, variant: "destructive" })
   });
 };

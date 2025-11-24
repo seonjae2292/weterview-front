@@ -1,15 +1,19 @@
-// app/mypage/page.tsx
 "use client";
 
 import { useMyProfile, useLogout } from "@/hooks/queries/use-auth";
-import { useGetHostedStudyGroups, useGetJoinedStudyGroups } from "@/hooks/queries/use-mypage";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { 
+  useGetHostedStudyGroups, 
+  useGetJoinedStudyGroups,
+  useGetLikedStudyGroups,      // [신규] 찜한 스터디 훅
+  useGetCommentedStudyGroups   // [신규] 댓글 단 스터디 훅
+} from "@/hooks/queries/use-mypage";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudyCard } from "@/components/study-group/study-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LogOut } from "lucide-react";
+import { LogOut, Edit, Users } from "lucide-react"; // [수정] 아이콘 추가
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { format } from "date-fns";
@@ -18,6 +22,8 @@ export default function MyPage() {
   const { data: user, isLoading: isUserLoading } = useMyProfile();
   const { data: hostedGroups, isLoading: isHostedLoading } = useGetHostedStudyGroups();
   const { data: joinedGroups, isLoading: isJoinedLoading } = useGetJoinedStudyGroups();
+  const { data: likedGroups, isLoading: isLikedLoading } = useGetLikedStudyGroups();
+  const { data: commentedGroups, isLoading: isCommentedLoading } = useGetCommentedStudyGroups();
   
   const { logout } = useLogout();
   const router = useRouter();
@@ -30,7 +36,7 @@ export default function MyPage() {
   if (!user) return null;
 
   const formatDate = (d: string) => { try { return format(new Date(d), "yyyy-MM-dd"); } catch { return d; }};
-
+  console.log("hostedGroups:", hostedGroups);
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="container mx-auto px-4 py-12">
@@ -58,18 +64,36 @@ export default function MyPage() {
 
           {/* 탭 섹션 */}
           <Tabs defaultValue="hosted" className="w-full">
-            <TabsList className="bg-gray-900 border-gray-800 w-full justify-start p-1">
+            <TabsList className="bg-gray-900 border-gray-800 w-full justify-start p-1 overflow-x-auto">
               <TabsTrigger value="hosted" className="data-[state=active]:bg-primary data-[state=active]:text-white">개설한 스터디</TabsTrigger>
               <TabsTrigger value="joined" className="data-[state=active]:bg-primary data-[state=active]:text-white">참여한 스터디</TabsTrigger>
+              <TabsTrigger value="liked" className="data-[state=active]:bg-primary data-[state=active]:text-white">찜한 스터디</TabsTrigger>
+              <TabsTrigger value="commented" className="data-[state=active]:bg-primary data-[state=active]:text-white">댓글 단 스터디</TabsTrigger>
             </TabsList>
             
             {/* 개설한 스터디 탭 */}
             <TabsContent value="hosted" className="mt-6">
                {isHostedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {hostedGroups?.map((group: any, idx: number) => (
-                     // id가 없으면 임시로 index 사용, 백엔드 수정 필요
-                     <StudyCard key={idx} id={group.id || idx.toString()} data={group} />
+                   {hostedGroups?.map((group, index) => (
+                     <div key={index} className="relative group">
+                       <StudyCard id={group.studyGroupId} data={group} />
+                       {/* Hover 시 나타나는 관리 버튼 */}
+                       <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                          <Button size="icon" variant="secondary" onClick={(e) => {
+                            e.preventDefault();
+                            router.push(`/study-groups/${group.studyGroupId}/edit`);
+                          }}>
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button size="icon" variant="secondary" onClick={(e) => {
+                            e.preventDefault();
+                            router.push(`/study-groups/${group.studyGroupId}/manage`);
+                          }}>
+                            <Users className="w-4 h-4" />
+                          </Button>
+                       </div>
+                     </div>
                    ))}
                    {hostedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">개설한 스터디가 없습니다.</p>}
                  </div>
@@ -84,6 +108,30 @@ export default function MyPage() {
                      <StudyCard key={idx} id={group.id || idx.toString()} data={group} />
                    ))}
                    {joinedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">참여한 스터디가 없습니다.</p>}
+                 </div>
+               )}
+            </TabsContent>
+
+            {/* 찜한 스터디 탭 */}
+            <TabsContent value="liked" className="mt-6">
+               {isLikedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
+                 <div className="grid md:grid-cols-2 gap-4">
+                   {likedGroups?.map((group: any, idx: number) => (
+                     <StudyCard key={idx} id={group.id || idx.toString()} data={group} />
+                   ))}
+                   {likedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">찜한 스터디가 없습니다.</p>}
+                 </div>
+               )}
+            </TabsContent>
+
+            {/* 댓글 단 스터디 탭 */}
+            <TabsContent value="commented" className="mt-6">
+               {isCommentedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
+                 <div className="grid md:grid-cols-2 gap-4">
+                   {commentedGroups?.map((group: any, idx: number) => (
+                     <StudyCard key={idx} id={group.id || idx.toString()} data={group} />
+                   ))}
+                   {commentedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">댓글을 남긴 스터디가 없습니다.</p>}
                  </div>
                )}
             </TabsContent>
