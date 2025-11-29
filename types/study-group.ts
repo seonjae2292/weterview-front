@@ -35,6 +35,7 @@ export interface StudyGroupDetailDto {
   title: string;
   subTitle: string;
   recruitingNumber: number;
+  isLiked: boolean;
   totalNumber: number;
   startDate: string;
   endDate: string;
@@ -100,6 +101,16 @@ export interface StudyGroupSearchParams {
   field?: string;
   location?: string;
   status?: string;
+}
+
+export interface StudyGroupLikeParams{
+  pageNumber: number;
+  pageSize: number;
+}
+
+export interface StudyGroupCommentedParams{
+  pageNumber: number;
+  pageSize: number;
 }
 
 export interface PageResponse<T> {
