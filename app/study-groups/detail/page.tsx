@@ -12,7 +12,7 @@ import { Calendar, MapPin, Users, Heart, ArrowLeft, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 
 // useSearchParams를 사용하는 컴포넌트는 Suspense로 감싸야 합니다 (빌드 에러 방지)
 function StudyDetailContent() {
@@ -27,10 +27,16 @@ function StudyDetailContent() {
   
   const [isLiked, setIsLiked] = useState(false); 
 
+  useEffect(() => {
+    if (study && study.isLiked !== undefined) {
+      setIsLiked(study.isLiked);
+    }
+  }, [study]);
+  
   if (!studyGroupId) {
     return <div className="text-center py-20 text-white">잘못된 접근입니다.</div>;
   }
-
+  
   const handleLike = () => {
     toggleLike({ isLiked });
     setIsLiked(!isLiked);
@@ -47,6 +53,8 @@ function StudyDetailContent() {
     try { return format(new Date(dateStr), "yyyy년 MM월 dd일"); } 
     catch { return dateStr; }
   };
+
+  
 
   if (isLoading) {
     return (
