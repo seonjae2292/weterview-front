@@ -438,7 +438,6 @@ export default function EditStudyGroupPage({ params }: { params: { id: string } 
           <p className="text-gray-400">스터디 정보를 최신 상태로 업데이트하세요.</p>
         </div>
         
-        {/* 데이터가 로드된 후에만 Form 컴포넌트를 마운트합니다. */}
         <EditForm study={study} studyGroupId={params.id} />
       </main>
     </div>
