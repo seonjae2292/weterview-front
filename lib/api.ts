@@ -1,4 +1,3 @@
-import { get } from "http";
 import { getAccessToken } from "./utils";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
