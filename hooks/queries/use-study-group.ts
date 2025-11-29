@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { CreateStudyGroupReq, UpdateStudyGroupReq } from "@/types/study-group";
+import { getAccessToken } from "@/lib/utils";
 
 // 게시글 생성
 export const useCreateStudyGroup = () => {
@@ -63,12 +64,15 @@ export const useGetStudyGroups = (params: StudyGroupSearchParams) => {
 
 // 상세 조회
 export const useGetStudyGroupDetail = (id: string) => {
+  // 토큰 존재 유무에 따라서 auth 설정 변경해야 한다.
+  const isToken = getAccessToken() ? true : false;
+  console.log("토근 존재유무 : ", isToken);
   return useQuery({
     queryKey: ["studyGroup", id],
     queryFn: async () => {
       const res = await fetcher<ApiResponse<StudyGroupDetailDto>>(
         `/studygroup/get/${id}`, 
-        { method: "GET", auth: true }
+        { method: "GET", auth: isToken }
       );
       return res.data;
     },
@@ -99,9 +103,11 @@ export const useToggleLike = (id: string) => {
   return useMutation({
     mutationFn: async ({ isLiked }: { isLiked: boolean }) => {
       if (isLiked) {
-        return fetcher(`/studygroup/${id}/likes`, { method: "DELETE", auth: true });
+        return fetcher(`/studygroup/${id}/unlikes`,
+           { method: "POST", auth: true });
       } else {
-        return fetcher(`/studygroup/${id}/likes`, { method: "POST", auth: true });
+        return fetcher(`/studygroup/${id}/likes`,
+           { method: "POST", auth: true });
       }
     },
     onSuccess: () => {
