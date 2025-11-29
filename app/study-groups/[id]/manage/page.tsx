@@ -21,7 +21,7 @@ export default function ManageApplicantsPage({ params }: { params: { id: string 
   const studyGroupId = Number(params.id);
 
   if (isLoading) return <div className="text-white text-center py-20">Loading...</div>;
-
+  
   return (
     <div className="min-h-screen bg-black text-white py-12">
       <main className="container mx-auto px-4 max-w-3xl">
