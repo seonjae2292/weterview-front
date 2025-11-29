@@ -2,7 +2,7 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { fetcher } from "@/lib/api";
 import { ApiResponse } from "@/types/auth";
-import { StudyApplicantDto } from "@/types/study-group";
+import { StudyApplicantDto, StudyGroupLikeParams, StudyGroupCommentedParams } from "@/types/study-group";
 import { useToast } from "@/components/ui/use-toast";
 // types/auth.ts에 정의된 MyPageInfoDto 사용
 // GetHostedStudyGroupRes, GetJoinedStudyGroupRes 타입 정의 필요 (생략, 위 DTO 참고하여 생성)
@@ -25,7 +25,7 @@ export const useGetJoinedStudyGroups = () => {
   return useQuery({
     queryKey: ["joinedStudyGroups"],
     queryFn: async () => {
-      const res = await fetcher<ApiResponse<any[]>>("/mypage/joined-study-groups?pageNumber=1&pageSize=100", {
+      const res = await fetcher<ApiResponse<any>>("/mypage/joined-study-groups?pageNumber=1&pageSize=100", {
         method: "GET",
         auth: true,
       });
@@ -37,22 +37,25 @@ export const useGetJoinedStudyGroups = () => {
 // hooks/queries/use-mypage.ts 추가 내용
 
 // 좋아요한 스터디
-export const useGetLikedStudyGroups = () => {
+export const useGetLikedStudyGroups = (params: StudyGroupLikeParams) => {
   return useQuery({
     queryKey: ["likedStudyGroups"],
     queryFn: async () => {
-      const res = await fetcher<ApiResponse<any[]>>("/mypage/liked-study-groups?pageNumber=1&pageSize=100", { auth: true });
+      const res = await fetcher<ApiResponse<any>>(
+        `/mypage/likes/posts?pageNumber=${params.pageNumber}&pageSize=${params.pageSize}`,
+{ auth: true });
       return res.data;
     },
   });
 };
 
 // 댓글 단 스터디
-export const useGetCommentedStudyGroups = () => {
+export const useGetCommentedStudyGroups = (params: StudyGroupCommentedParams) => {
   return useQuery({
     queryKey: ["commentedStudyGroups"],
     queryFn: async () => {
-      const res = await fetcher<ApiResponse<any[]>>("/mypage/commented-study-groups?pageNumber=1&pageSize=100", { auth: true });
+      const res = await fetcher<ApiResponse<any>>(`/mypage/commented/posts?pageNumber=${params.pageNumber}&pageSize=${params.pageSize}`, 
+        { auth: true });
       return res.data;
     },
   });
