@@ -17,13 +17,24 @@ import { LogOut, Edit, Users } from "lucide-react"; // [수정] 아이콘 추가
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { format } from "date-fns";
+import { useState } from "react";
 
 export default function MyPage() {
+    const [filters, setFilters] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+  }); 
+  
+  const [commentedPage, setCommentedPage] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+  });
+
   const { data: user, isLoading: isUserLoading } = useMyProfile();
   const { data: hostedGroups, isLoading: isHostedLoading } = useGetHostedStudyGroups();
   const { data: joinedGroups, isLoading: isJoinedLoading } = useGetJoinedStudyGroups();
-  const { data: likedGroups, isLoading: isLikedLoading } = useGetLikedStudyGroups();
-  const { data: commentedGroups, isLoading: isCommentedLoading } = useGetCommentedStudyGroups();
+  const { data: likedGroups, isLoading: isLikedLoading } = useGetLikedStudyGroups(filters);
+  const { data: commentedGroups, isLoading: isCommentedLoading } = useGetCommentedStudyGroups(commentedPage);
   
   const { logout } = useLogout();
   const router = useRouter();
@@ -36,7 +47,7 @@ export default function MyPage() {
   if (!user) return null;
 
   const formatDate = (d: string) => { try { return format(new Date(d), "yyyy-MM-dd"); } catch { return d; }};
-  console.log("hostedGroups:", hostedGroups);
+  
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="container mx-auto px-4 py-12">
@@ -104,8 +115,8 @@ export default function MyPage() {
             <TabsContent value="joined" className="mt-6">
                {isJoinedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {joinedGroups?.map((group: any, idx: number) => (
-                     <StudyCard key={idx} id={group.id || idx.toString()} data={group} />
+                   {joinedGroups?.content.map((group: any, idx: number) => (
+                     <StudyCard key={idx} id={group.studyGroupId || idx.toString()} data={group} />
                    ))}
                    {joinedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">참여한 스터디가 없습니다.</p>}
                  </div>
@@ -116,8 +127,8 @@ export default function MyPage() {
             <TabsContent value="liked" className="mt-6">
                {isLikedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {likedGroups?.map((group: any, idx: number) => (
-                     <StudyCard key={idx} id={group.id || idx.toString()} data={group} />
+                   {likedGroups?.content.map((group: any, idx: number) => (
+                     <StudyCard key={idx} id={group.studyGroupId || idx.toString()} data={group} />
                    ))}
                    {likedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">찜한 스터디가 없습니다.</p>}
                  </div>
@@ -128,8 +139,8 @@ export default function MyPage() {
             <TabsContent value="commented" className="mt-6">
                {isCommentedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {commentedGroups?.map((group: any, idx: number) => (
-                     <StudyCard key={idx} id={group.id || idx.toString()} data={group} />
+                   {commentedGroups?.content.map((group: any, idx: number) => (
+                     <StudyCard key={idx} id={group.studyGroupId || idx.toString()} data={group} />
                    ))}
                    {commentedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">댓글을 남긴 스터디가 없습니다.</p>}
                  </div>
