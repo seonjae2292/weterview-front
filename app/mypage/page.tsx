@@ -4,8 +4,8 @@ import { useMyProfile, useLogout } from "@/hooks/queries/use-auth";
 import { 
   useGetHostedStudyGroups, 
   useGetJoinedStudyGroups,
-  useGetLikedStudyGroups,      // [신규] 찜한 스터디 훅
-  useGetCommentedStudyGroups   // [신규] 댓글 단 스터디 훅
+  useGetLikedStudyGroups,   
+  useGetCommentedStudyGroups 
 } from "@/hooks/queries/use-mypage";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -30,11 +30,13 @@ export default function MyPage() {
     pageSize: 10,
   });
 
+  const [activeTab, setActiveTab] = useState("hosted");
+
   const { data: user, isLoading: isUserLoading } = useMyProfile();
-  const { data: hostedGroups, isLoading: isHostedLoading } = useGetHostedStudyGroups();
-  const { data: joinedGroups, isLoading: isJoinedLoading } = useGetJoinedStudyGroups();
-  const { data: likedGroups, isLoading: isLikedLoading } = useGetLikedStudyGroups(filters);
-  const { data: commentedGroups, isLoading: isCommentedLoading } = useGetCommentedStudyGroups(commentedPage);
+  const { data: hostedGroups, isLoading: isHostedLoading } = useGetHostedStudyGroups({ enabled: activeTab === "hosted" });
+  const { data: joinedGroups, isLoading: isJoinedLoading } = useGetJoinedStudyGroups({ enabled: activeTab === "joined" });
+  const { data: likedGroups, isLoading: isLikedLoading } = useGetLikedStudyGroups(filters, { enabled: activeTab === "liked" });
+  const { data: commentedGroups, isLoading: isCommentedLoading } = useGetCommentedStudyGroups(commentedPage, { enabled: activeTab === "commented" });
   
   const { logout } = useLogout();
   const router = useRouter();
@@ -74,7 +76,7 @@ export default function MyPage() {
           </Card>
 
           {/* 탭 섹션 */}
-          <Tabs defaultValue="hosted" className="w-full">
+          <Tabs defaultValue="hosted" className="w-full" onValueChange={setActiveTab}>
             <TabsList className="bg-gray-900 border-gray-800 w-full justify-start p-1 overflow-x-auto">
               <TabsTrigger value="hosted" className="data-[state=active]:bg-primary data-[state=active]:text-white">개설한 스터디</TabsTrigger>
               <TabsTrigger value="joined" className="data-[state=active]:bg-primary data-[state=active]:text-white">참여한 스터디</TabsTrigger>
