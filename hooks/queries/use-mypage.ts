@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 // types/auth.ts에 정의된 MyPageInfoDto 사용
 // GetHostedStudyGroupRes, GetJoinedStudyGroupRes 타입 정의 필요 (생략, 위 DTO 참고하여 생성)
 
-export const useGetHostedStudyGroups = () => {
+export const useGetHostedStudyGroups = (options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: ["hostedStudyGroups"],
     queryFn: async () => {
@@ -18,10 +18,11 @@ export const useGetHostedStudyGroups = () => {
       });
       return res.data;
     },
+    ...options,
   });
 };
 
-export const useGetJoinedStudyGroups = () => {
+export const useGetJoinedStudyGroups = (options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: ["joinedStudyGroups"],
     queryFn: async () => {
@@ -31,33 +32,43 @@ export const useGetJoinedStudyGroups = () => {
       });
       return res.data;
     },
+    ...options,
   });
 };
 
 // hooks/queries/use-mypage.ts 추가 내용
 
-// 좋아요한 스터디
-export const useGetLikedStudyGroups = (params: StudyGroupLikeParams) => {
+export const useGetLikedStudyGroups = (
+  params: StudyGroupLikeParams,
+  options?: { enabled?: boolean }
+) => {
   return useQuery({
-    queryKey: ["likedStudyGroups"],
+    queryKey: ["likedStudyGroups", params],
     queryFn: async () => {
       const res = await fetcher<ApiResponse<any>>(
         `/mypage/likes/posts?pageNumber=${params.pageNumber}&pageSize=${params.pageSize}`,
-{ auth: true });
+        { auth: true }
+      );
       return res.data;
     },
+    ...options,
   });
 };
 
-// 댓글 단 스터디
-export const useGetCommentedStudyGroups = (params: StudyGroupCommentedParams) => {
+export const useGetCommentedStudyGroups = (
+  params: StudyGroupCommentedParams,
+  options?: { enabled?: boolean }
+) => {
   return useQuery({
-    queryKey: ["commentedStudyGroups"],
+    queryKey: ["commentedStudyGroups", params],
     queryFn: async () => {
-      const res = await fetcher<ApiResponse<any>>(`/mypage/commented/posts?pageNumber=${params.pageNumber}&pageSize=${params.pageSize}`, 
-        { auth: true });
+      const res = await fetcher<ApiResponse<any>>(
+        `/mypage/commented/posts?pageNumber=${params.pageNumber}&pageSize=${params.pageSize}`,
+        { auth: true }
+      );
       return res.data;
     },
+    ...options,
   });
 };
 
