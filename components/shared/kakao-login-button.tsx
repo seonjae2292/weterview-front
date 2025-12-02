@@ -3,13 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 
+const KAKAO_AUTH_URI = process.env.NEXT_PUBLIC_KAKAO_AUTH_URI!;
+const KAKAO_API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY!;
+const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI!;
+
 export function KakaoLoginButton() {
   const handleLogin = () => {
-    const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY;
-    // 리다이렉트 URI는 카카오 개발자 센터 설정과 일치해야 합니다.
-    // const REDIRECT_URI = `${window.location.origin}/auth/kakao/callback`;
-    const REDIRECT_URI = `http://localhost:3000/oauth/kakao/callback`;
-    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    const KAKAO_AUTH_URL = `${KAKAO_AUTH_URI}?client_id=${KAKAO_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     
     window.location.href = KAKAO_AUTH_URL;
   };
