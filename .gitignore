@@ -14,3 +14,4 @@ out/
 
 # environment variables
 .env.development
+.env.local
