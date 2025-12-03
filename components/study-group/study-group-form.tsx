@@ -44,6 +44,7 @@ export function StudyGroupForm({
 }: StudyGroupFormProps) {
   const form = useForm<StudyGroupSchema>({
     resolver: zodResolver(studyGroupSchema) as unknown as Resolver<StudyGroupSchema>,
+    mode: "onChange",
     defaultValues: {
       title: "",
       subTitle: "",
@@ -180,7 +181,7 @@ export function StudyGroupForm({
                 <FormItem>
                   <FormLabel>현재 모집된 인원</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="0" {...field} className="bg-black border-gray-700" />
+                    <Input type="number" min="1" placeholder="1" {...field} className="bg-black border-gray-700" />
                   </FormControl>
                   <FormDescription>현재 확정된 인원수를 입력하세요.</FormDescription>
                   <FormMessage />
@@ -195,7 +196,7 @@ export function StudyGroupForm({
                 <FormItem>
                   <FormLabel>총 모집 인원</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="4" {...field} className="bg-black border-gray-700" />
+                    <Input type="number" min="2" placeholder="2" {...field} className="bg-black border-gray-700" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -234,7 +235,11 @@ export function StudyGroupForm({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date < new Date("1900-01-01")}
+                        disabled={(date) => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          return date < today;
+                        }}
                         initialFocus
                       />
                     </PopoverContent>
@@ -274,7 +279,20 @@ export function StudyGroupForm({
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date < new Date("1900-01-01")}
+                        disabled={(date) => {
+                          const startDate = form.getValues("startDate");
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+
+                          if (startDate) {
+                            const minEndDate = new Date(startDate);
+                            minEndDate.setDate(startDate.getDate() + 1); // Minimum end date is 1 day after start date
+                            minEndDate.setHours(0, 0, 0, 0);
+                            return date < minEndDate;
+                          }
+                          // If startDate is not set, then disable dates before today
+                          return date < today;
+                        }}
                         initialFocus
                       />
                     </PopoverContent>
