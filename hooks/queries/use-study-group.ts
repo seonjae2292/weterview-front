@@ -112,6 +112,7 @@ export const useToggleLike = (id: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["studyGroup", id] });
+      queryClient.invalidateQueries({ queryKey: ["likedStudyGroups"] });
       toast({ title: "처리되었습니다." });
     },
     onError: () => {
