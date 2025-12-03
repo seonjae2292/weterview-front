@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react"; // Suspense 추가
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,12 +12,13 @@ import { FEATURED_STUDY_GROUPS } from "@/constants/mock";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Home() {
+// 1. 기존 Home 컴포넌트의 로직을 HomeContent로 이동
+function HomeContent() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const newsletterRef = useRef<HTMLElement>(null);
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams(); // 여기서 사용 중
   const router = useRouter();
 
   // 최신 스터디 조회 (1페이지, 6개)
@@ -25,10 +26,6 @@ export default function Home() {
     pageNumber: 1,
     pageSize: 6,
   });
-
-  const scrollToNewsletter = () => {
-    newsletterRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,7 +123,7 @@ export default function Home() {
           ) : (
             <div className="grid md:grid-cols-3 gap-6">
               {recentData?.content.map((study: any, index: number) => (
-                // API 응답에 id가 없을 경우 index를 키로 사용 (주의: 상세 페이지 이동 불가 가능성 있음)
+                // API 응답에 id가 없을 경우 index를 키로 사용
                 <StudyCard key={index} id={study.id || String(index)} data={study} />
               ))}
               {recentData?.content.length === 0 && (
@@ -162,5 +159,15 @@ export default function Home() {
         </section>
       </main>
     </div>
+  );
+}
+
+// 2. Default Export를 Suspense로 감싼 컴포넌트로 변경
+export default function Home() {
+  return (
+    // Fallback UI는 로딩 중에 보여줄 화면 (예: 빈 화면 또는 스켈레톤)
+    <Suspense fallback={<div className="min-h-screen bg-black text-white" />}>
+      <HomeContent />
+    </Suspense>
   );
 }
