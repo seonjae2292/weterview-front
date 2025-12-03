@@ -14,6 +14,24 @@ export const studyGroupSchema = z.object({
   joinCondition: z.string().min(2, "참여 조건을 입력해주세요."),
   contact: z.string().min(2, "연락처/문의처를 입력해주세요."),
   status: z.string().optional(),
+}).refine(data => {
+  return data.recruitingNumber < data.totalNumber;
+}, {
+  message: "현재 모집된 인원은 총 모집 인원보다 적어야 합니다.",
+  path: ["recruitingNumber"],
+}).refine(data => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return data.startDate >= today;
+}, {
+  message: "모집 시작일은 현재 날짜보다 이전이 될 수 없습니다.",
+  path: ["startDate"],
+}).refine(data => {
+  const oneDayInMs = 1000 * 60 * 60 * 24;
+  return data.endDate.getTime() - data.startDate.getTime() >= oneDayInMs;
+}, {
+  message: "모집 마감일은 모집 시작일보다 하루 이상 이후여야 합니다.",
+  path: ["endDate"],
 });
 
 export type StudyGroupSchema = z.infer<typeof studyGroupSchema>;
