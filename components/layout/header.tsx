@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Header() {
   const { data: user, isLoading } = useMyProfile();
-  console.log(isLoading, user);
+  
   return (
     <header className="container mx-auto py-6 px-4">
       <div className="flex items-center justify-between">
