@@ -197,3 +197,44 @@ export const useUpdateStudyGroup = (id: string) => {
     onError: (err) => toast({ title: "수정 실패", description: err.message, variant: "destructive" })
   });
 };
+
+// 인기 있는 스터디
+export const usePopularStudyGroups = (params: StudyGroupSearchParams) => {
+  return useQuery({
+    queryKey: ["studyGroups", params],
+    queryFn: async () => {
+      // 쿼리 파라미터 생성
+      const query = new URLSearchParams({
+        pageNumber: params.pageNumber.toString(),
+        pageSize: params.pageSize.toString(),
+      });
+
+      const res = await fetcher<ApiResponse<PageResponse<StudyGroupItemDto>>>(
+        `/studygroup/popular?${query.toString()}`, 
+        { method: "GET", auth: false } // 목록 조회는 토큰 없이 가능하면 false, 필수면 true
+      );
+      return res.data;
+    },
+    placeholderData: (previousData) => previousData, // 페이지 이동 시 깜빡임 방지
+  });
+};
+
+// 최신 스터디 
+export const useLatestStudyGroups = ({ count } : { count : number}) => {
+  return useQuery({
+    queryKey: ["studyGroups", count],
+    queryFn: async () => {
+      // 쿼리 파라미터 생성
+      const query = new URLSearchParams({
+        count: count.toString(),
+      });
+
+      const res = await fetcher<ApiResponse<StudyGroupItemDto[]>>(
+        `/studygroup/latest?${query.toString()}`, 
+        { method: "GET", auth: false } // 목록 조회는 토큰 없이 가능하면 false, 필수면 true
+      );
+      return res.data;
+    },
+    placeholderData: (previousData) => previousData, // 페이지 이동 시 깜빡임 방지
+  });
+};

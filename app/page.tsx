@@ -5,10 +5,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useGetStudyGroups } from "@/hooks/queries/use-study-group";
+import { 
+  useGetStudyGroups, 
+  usePopularStudyGroups, 
+  useLatestStudyGroups } from "@/hooks/queries/use-study-group";
 import { StudyCard } from "@/components/study-group/study-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FEATURED_STUDY_GROUPS } from "@/constants/mock";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -27,6 +29,15 @@ function HomeContent() {
     pageSize: 6,
   });
 
+  const { data: popularData, isLoading: isPopularLoading } = usePopularStudyGroups({
+    pageNumber: 1,
+    pageSize: 3,
+  })
+
+  const { data: latestData, isLoading: isLatestLoading } = useLatestStudyGroups({
+    count: 3
+  })
+  
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) {
@@ -89,17 +100,29 @@ function HomeContent() {
           </div>
         </section>
 
-        {/* Featured Section (Mock Data) */}
         <section className="mb-20">
           <div className="flex items-center gap-2 mb-8">
             <Sparkles className="text-yellow-500 w-6 h-6" />
             <h2 className="text-2xl font-bold">지금 뜨는 스터디</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {FEATURED_STUDY_GROUPS.map((study, idx) => (
-              <StudyCard key={idx} id={String(study.id)} data={study} />
-            ))}
-          </div>
+            {isPopularLoading ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <Skeleton key={i} className="h-[280px] rounded-xl bg-gray-900" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-6">
+              {popularData?.content.map((study: any, index: number) => (
+                <StudyCard key={index} id={study.id || String(index)} data={study} />
+              ))}
+              {popularData?.content.length === 0 && (
+                <div className="col-span-full text-center py-10 text-gray-500">
+                  등록된 스터디가 없습니다.
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Recent Section (API Integration) */}
@@ -114,7 +137,7 @@ function HomeContent() {
             </Link>
           </div>
           
-          {isRecentLoading ? (
+          {isLatestLoading ? (
             <div className="grid md:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
                 <Skeleton key={i} className="h-[280px] rounded-xl bg-gray-900" />
@@ -122,11 +145,11 @@ function HomeContent() {
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-6">
-              {recentData?.content.map((study: any, index: number) => (
+              {latestData?.map((study: any, index: number) => (
                 // API 응답에 id가 없을 경우 index를 키로 사용
                 <StudyCard key={index} id={study.id || String(index)} data={study} />
               ))}
-              {recentData?.content.length === 0 && (
+              {latestData?.length === 0 && (
                 <div className="col-span-full text-center py-10 text-gray-500">
                   등록된 스터디가 없습니다.
                 </div>
