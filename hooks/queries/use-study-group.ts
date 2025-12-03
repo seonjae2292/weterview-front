@@ -66,7 +66,7 @@ export const useGetStudyGroups = (params: StudyGroupSearchParams) => {
 export const useGetStudyGroupDetail = (id: string) => {
   // 토큰 존재 유무에 따라서 auth 설정 변경해야 한다.
   const isToken = getAccessToken() ? true : false;
-  console.log("토근 존재유무 : ", isToken);
+  
   return useQuery({
     queryKey: ["studyGroup", id],
     queryFn: async () => {

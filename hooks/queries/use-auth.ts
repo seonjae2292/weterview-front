@@ -98,20 +98,19 @@ export const useSignup = () => {
 
 // 내 정보 조회 (토큰 필수 -> auth: true / 생략 가능하지만 명시 권장)
 export const useMyProfile = () => {
+  const isToken = getAccessToken() ? true : false;
+
   return useQuery({
     queryKey: ["myProfile"],
     queryFn: async () => {
-      const token = getAccessToken();
-      if (!token) return null; // 토큰 없으면 요청 안 함
-
       const response = await fetcher<ApiResponse<MyPageInfoDto>>("/mypage/info", {
         method: "GET",
-        auth: true, // [중요] 토큰 필수
+        auth: isToken,
       });
       return response.data;
     },
-    staleTime: 1000 * 60 * 10, // 10분간 캐시 유지
-    retry: 0, // 인증 에러 시 재시도 하지 않음
+    enabled: isToken,
+    retry: 0,
   });
 };
 
