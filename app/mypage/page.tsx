@@ -1,23 +1,24 @@
 "use client";
 
 import { useMyProfile, useLogout } from "@/hooks/queries/use-auth";
-import { 
+import {
   useGetHostedStudyGroups, 
   useGetJoinedStudyGroups,
-  useGetLikedStudyGroups,   
+  useGetLikedStudyGroups,
   useGetCommentedStudyGroups 
 } from "@/hooks/queries/use-mypage";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useUpdateNickname } from "@/hooks/queries/use-user";
+import { StudyGroupItemDto } from "@/types/study-group";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudyCard } from "@/components/study-group/study-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LogOut, Edit, Users } from "lucide-react"; // [수정] 아이콘 추가
+import { LogOut, Edit, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { useState } from "react";
+import { EditNicknameDialog } from "@/components/mypage/edit-nickname-dialog";
 
 export default function MyPage() {
     const [filters, setFilters] = useState({
@@ -31,6 +32,7 @@ export default function MyPage() {
   });
 
   const [activeTab, setActiveTab] = useState("hosted");
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
 
   const { data: user, isLoading: isUserLoading } = useMyProfile();
   const { data: hostedGroups, isLoading: isHostedLoading } = useGetHostedStudyGroups({ enabled: activeTab === "hosted" });
@@ -40,10 +42,19 @@ export default function MyPage() {
   
   const { logout } = useLogout();
   const router = useRouter();
+  const { mutate: updateNickname } = useUpdateNickname();
 
   useEffect(() => {
     if (!isUserLoading && !user) router.push("/");
   }, [user, isUserLoading, router]);
+
+  const handleNicknameUpdate = (newNickname: string) => {
+    updateNickname(newNickname, {
+      onSuccess: () => {
+        setIsEditingNickname(false);
+      },
+    });
+  };
 
   if (isUserLoading) return <div className="bg-black min-h-screen pt-20"><Skeleton className="w-full max-w-3xl mx-auto h-[400px] bg-gray-900"/></div>;
   if (!user) return null;
@@ -65,15 +76,30 @@ export default function MyPage() {
           <Card className="bg-gray-900 border-gray-800 mb-12">
             <CardHeader className="flex flex-row items-center gap-6 border-b border-gray-800 pb-8">
               <Avatar className="h-20 w-20 border-2 border-primary">
+                <AvatarImage src={user.profileImageUrl} alt={user.nickname} />
                 <AvatarFallback className="bg-primary text-2xl font-bold">{user.nickname.slice(0, 2)}</AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle className="text-2xl text-white">{user.nickname}</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-2xl text-white">{user.nickname}</CardTitle>
+                  <Button variant="ghost" size="icon" onClick={() => setIsEditingNickname(true)}>
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                </div>
                 <CardDescription className="text-gray-400">{user.kakaoEmail}</CardDescription>
-                <p className="text-xs text-gray-500 mt-2">가입일: {formatDate(user.createdAt)}</p>
               </div>
             </CardHeader>
           </Card>
+
+          {/* 닉네임 수정 다이얼로그 */}
+          {isEditingNickname && (
+            <EditNicknameDialog
+              isOpen={isEditingNickname}
+              onClose={() => setIsEditingNickname(false)}
+              onSave={handleNicknameUpdate}
+              currentNickname={user.nickname}
+            />
+          )}
 
           {/* 탭 섹션 */}
           <Tabs defaultValue="hosted" className="w-full" onValueChange={setActiveTab}>
@@ -88,9 +114,9 @@ export default function MyPage() {
             <TabsContent value="hosted" className="mt-6">
                {isHostedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {hostedGroups?.map((group, index) => (
-                     <div key={index} className="relative group">
-                       <StudyCard id={group.studyGroupId} data={group} />
+                   {hostedGroups?.content.map((group: StudyGroupItemDto) => (
+                     <div key={group.studyGroupId} className="relative group">
+                       <StudyCard data={group} />
                        {/* Hover 시 나타나는 관리 버튼 */}
                        <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                           <Button size="icon" variant="secondary" onClick={(e) => {
@@ -108,7 +134,7 @@ export default function MyPage() {
                        </div>
                      </div>
                    ))}
-                   {hostedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">개설한 스터디가 없습니다.</p>}
+                   {hostedGroups?.content.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">개설한 스터디가 없습니다.</p>}
                  </div>
                )}
             </TabsContent>
@@ -117,10 +143,10 @@ export default function MyPage() {
             <TabsContent value="joined" className="mt-6">
                {isJoinedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {joinedGroups?.content.map((group: any, idx: number) => (
-                     <StudyCard key={idx} id={group.studyGroupId || idx.toString()} data={group} />
+                   {joinedGroups?.content.map((group: StudyGroupItemDto) => (
+                     <StudyCard key={group.studyGroupId} data={group} />
                    ))}
-                   {joinedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">참여한 스터디가 없습니다.</p>}
+                   {joinedGroups?.content.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">참여한 스터디가 없습니다.</p>}
                  </div>
                )}
             </TabsContent>
@@ -129,10 +155,10 @@ export default function MyPage() {
             <TabsContent value="liked" className="mt-6">
                {isLikedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {likedGroups?.content.map((group: any, idx: number) => (
-                     <StudyCard key={idx} id={group.studyGroupId || idx.toString()} data={group} />
+                   {likedGroups?.content.map((group: StudyGroupItemDto) => (
+                     <StudyCard key={group.studyGroupId} data={group} />
                    ))}
-                   {likedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">찜한 스터디가 없습니다.</p>}
+                   {likedGroups?.content.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">찜한 스터디가 없습니다.</p>}
                  </div>
                )}
             </TabsContent>
@@ -141,10 +167,10 @@ export default function MyPage() {
             <TabsContent value="commented" className="mt-6">
                {isCommentedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
-                   {commentedGroups?.content.map((group: any, idx: number) => (
-                     <StudyCard key={idx} id={group.studyGroupId || idx.toString()} data={group} />
+                   {commentedGroups?.content.map((group: StudyGroupItemDto) => (
+                     <StudyCard key={group.studyGroupId} data={group} />
                    ))}
-                   {commentedGroups?.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">댓글을 남긴 스터디가 없습니다.</p>}
+                   {commentedGroups?.content.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">댓글을 남긴 스터디가 없습니다.</p>}
                  </div>
                )}
             </TabsContent>

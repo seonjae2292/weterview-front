@@ -9,15 +9,14 @@ const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI!;
 
 export function KakaoLoginButton() {
   const handleLogin = () => {
-    console.log("TEs")
     const KAKAO_AUTH_URL = `${KAKAO_AUTH_URI}?client_id=${KAKAO_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-    
+
     window.location.href = KAKAO_AUTH_URL;
   };
 
   return (
-    <Button 
-      onClick={handleLogin} 
+    <Button
+      onClick={handleLogin}
       className="bg-[#FEE500] text-[#000000] hover:bg-[#FEE500]/90 w-full font-bold"
     >
       <MessageCircle className="mr-2 h-4 w-4 fill-current" />

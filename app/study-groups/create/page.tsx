@@ -19,11 +19,9 @@ export default function CreateStudyGroupPage() {
       endDate: formatDateTime(values.endDate),
     };
 
-    createStudyGroup(requestBody, {
-      onSuccess: () => {
-        router.push("/study-groups");
-      },
-    });
+    console.log(requestBody.startDate, requestBody.endDate);
+
+    createStudyGroup(requestBody);
   };
 
   return (

@@ -7,19 +7,21 @@ const cn = (...inputs: ClassValue[]) => {
 }
 
 const getAccessToken = () => {
-  if (!getCookie("accessToken")) {
-    return undefined;
-  }
-
   return getCookie("accessToken");
 }
 
-const setAccessToken = (accessToken: string) => {
-  setCookie("accessToken", accessToken, { maxAge: 60 * 60, path: "/" });
+const getRefreshToken = () => {
+  return getCookie("refreshToken");
 }
 
-const deleteAccessToken = () => {
+const setTokens = (accessToken: string, refreshToken: string) => {
+  setCookie("accessToken", accessToken, { maxAge: 60 * 60, path: "/" }); // 1 hour
+  setCookie("refreshToken", refreshToken, { maxAge: 60 * 60 * 24 * 7, path: "/" }); // 7 days
+}
+
+const deleteTokens = () => {
   deleteCookie("accessToken", { path: "/" });
+  deleteCookie("refreshToken", { path: "/" });
 }
 
-export { cn, getAccessToken, setAccessToken, deleteAccessToken };
+export { cn, getAccessToken, getRefreshToken, setTokens, deleteTokens };

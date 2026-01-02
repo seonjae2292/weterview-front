@@ -28,8 +28,7 @@ export function UserMenu({ user }: UserMenuProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-9 w-9 border border-gray-700 hover:border-primary transition-colors">
-            {/* 프로필 이미지가 API에 없으므로 기본 아바타 혹은 로직 추가 필요 */}
-            <AvatarImage src="" alt={user.nickname} />
+            <AvatarImage src={user.profileImageUrl} alt={user.nickname} />
             <AvatarFallback className="bg-primary text-primary-foreground font-bold">
               {user.nickname.slice(0, 2)}
             </AvatarFallback>

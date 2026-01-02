@@ -94,13 +94,8 @@ export default function StudyGroupListPage() {
           </div>
         ) : (
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-             {data?.content.map((study: any, index: number) => (
-               // 목록 API에는 id가 포함되어 있지 않을 수 있습니다. (DTO 확인 필요)
-               // 만약 DTO에 id가 없다면 백엔드 수정이 필요하거나, 임시로 index 사용해야함.
-               // 현재 GetStudyGroupPageRes에는 id 필드가 없습니다! (설계 이슈)
-               // -> 백엔드 GetStudyGroupPageRes에 private Long id; 추가가 필요합니다.
-               // 일단 여기서는 에러가 나지 않게 index나 가상의 id를 사용합니다.
-               <StudyCard key={index} id={study.id || index.toString()} data={study} />
+             {data?.content.map((study, index) => (
+               <StudyCard key={study.studyGroupId} data={study} />
              ))}
              
              {data?.content.length === 0 && (

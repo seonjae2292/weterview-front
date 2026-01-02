@@ -10,11 +10,11 @@ import { CommentSection } from "@/components/study-group/comment-section";
 import { FIELD_LABEL, LOCATION_LABEL, STATUS_LABEL, STATUS_COLOR } from "@/constants/enums";
 import { Calendar, MapPin, Users, Heart, ArrowLeft, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useState, Suspense, useEffect } from "react";
 
-// useSearchParams를 사용하는 컴포넌트는 Suspense로 감싸야 합니다 (빌드 에러 방지)
 function StudyDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -22,24 +22,14 @@ function StudyDetailContent() {
   
   const { data: study, isLoading } = useGetStudyGroupDetail(studyGroupId || "");
   const { mutate: joinStudy } = useJoinStudyGroup();
-  // studyGroupId가 없을 경우를 대비해 빈 문자열 처리 (실제로는 아래에서 리턴됨)
   const { mutate: toggleLike } = useToggleLike(studyGroupId || "");
-  
-  const [isLiked, setIsLiked] = useState(false); 
-
-  useEffect(() => {
-    if (study && study.isLiked !== undefined) {
-      setIsLiked(study.isLiked);
-    }
-  }, [study]);
   
   if (!studyGroupId) {
     return <div className="text-center py-20 text-white">잘못된 접근입니다.</div>;
   }
   
   const handleLike = () => {
-    toggleLike({ isLiked });
-    setIsLiked(!isLiked);
+    toggleLike();
   };
 
   const handleJoin = () => {
@@ -95,6 +85,12 @@ function StudyDetailContent() {
         </div>
         <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">{study.title}</h1>
         <p className="text-xl text-gray-400">{study.subTitle}</p>
+        <div className="mt-4 flex items-center gap-3">
+          <Avatar>
+            <AvatarFallback>{study.writerNickname.slice(0, 2)}</AvatarFallback>
+          </Avatar>
+          <span className="font-medium">{study.writerNickname}</span>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
@@ -114,10 +110,6 @@ function StudyDetailContent() {
               <h2 className="text-xl font-bold mb-4 border-l-4 border-primary pl-3">진행 일정</h2>
               <p className="bg-gray-900/30 p-4 rounded-lg text-gray-300">{study.schedule}</p>
             </div>
-            <div>
-              <h2 className="text-xl font-bold mb-4 border-l-4 border-primary pl-3">참여 조건</h2>
-              <p className="bg-gray-900/30 p-4 rounded-lg text-gray-300">{study.joinCondition}</p>
-            </div>
           </section>
 
           {/* 댓글 섹션 */}
@@ -132,12 +124,12 @@ function StudyDetailContent() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm font-medium">
                   <span className="text-gray-400">모집 인원</span>
-                  <span className="text-primary">{study.recruitingNumber} / {study.totalNumber}명</span>
+                  <span className="text-primary">{study.currentMemberCount} / {study.maxMemberCount}명</span>
                 </div>
                 <div className="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
                   <div 
                     className="bg-primary h-2.5 rounded-full transition-all duration-500" 
-                    style={{ width: `${(study.recruitingNumber / study.totalNumber) * 100}%` }} 
+                    style={{ width: `${(study.currentMemberCount / study.maxMemberCount) * 100}%` }} 
                   />
                 </div>
               </div>
@@ -161,14 +153,6 @@ function StudyDetailContent() {
                     <p>{LOCATION_LABEL[study.location] || study.location}</p>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <User className="w-5 h-5 text-gray-500 mt-0.5" />
-                  <div>
-                    <p className="text-gray-500 text-xs mb-0.5">문의처</p>
-                    <p>{study.contact}</p>
-                  </div>
-                </div>
               </div>
 
               {/* 액션 버튼 */}
@@ -177,15 +161,15 @@ function StudyDetailContent() {
                   variant="outline" 
                   className={cn(
                     "col-span-1 border-gray-700 hover:bg-gray-800", 
-                    isLiked && "text-red-500 border-red-500/50 bg-red-500/10"
+                    study.isLiked && "text-red-500 border-red-500/50 bg-red-500/10"
                   )}
                   onClick={handleLike}
                 >
-                  <Heart className={cn("w-5 h-5", isLiked && "fill-current")} />
+                  <Heart className={cn("w-5 h-5", study.isLiked && "fill-current")} />
                 </Button>
                 <Button 
                   className="col-span-4 font-bold text-base"
-                  disabled={study.status !== "RECRUITING" || study.recruitingNumber >= study.totalNumber}
+                  disabled={study.status !== "RECRUITING" || study.currentMemberCount >= study.maxMemberCount}
                   onClick={handleJoin}
                 >
                   {study.status === "RECRUITING" ? "참여 신청하기" : "모집 마감"}
@@ -193,12 +177,13 @@ function StudyDetailContent() {
               </div>
             </Card>
             
-            {/* 작성자 정보 (Optional) */}
-            <div className="flex items-center gap-3 px-2">
-               <p className="text-xs text-gray-500">
-                 작성일 {formatDate(study.createdAt)} · 수정일 {formatDate(study.updatedAt)}
-               </p>
-            </div>
+            {study.isOwner && (
+              <Button asChild variant="secondary" className="w-full">
+                <Link href={`/study-groups/${study.studyGroupId}/edit`}>
+                  스터디 정보 수정
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>

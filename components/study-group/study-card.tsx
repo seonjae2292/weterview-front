@@ -1,28 +1,16 @@
-// components/study-group/study-card.tsx
+import { StudyGroupItemDto } from "@/types/study-group";
 import Link from "next/link";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Users } from "lucide-react";
+import { Calendar, MapPin, Users, Heart } from "lucide-react";
 import { FIELD_LABEL, LOCATION_LABEL, STATUS_LABEL, STATUS_COLOR } from "@/constants/enums";
 import { format } from "date-fns";
 
 interface StudyCardProps {
-  // 백엔드 DTO 필드명이 id가 아닌 경우를 대비해 id는 별도 prop으로 받거나 DTO 확장
-  id: string; 
-  data: {
-    title: string;
-    subTitle: string;
-    field: string;
-    location: string;
-    status: string;
-    recruitingNumber: number;
-    totalNumber: number;
-    startDate: string;
-    endDate: string;
-  }
+  data: StudyGroupItemDto;
 }
 
-export function StudyCard({ id, data }: StudyCardProps) {
+export function StudyCard({ data }: StudyCardProps) {
   // 날짜 포맷팅 (YYYY-MM-DD)
   const formatDate = (dateStr: string) => {
     try { return format(new Date(dateStr), "yyyy-MM-dd"); } 
@@ -30,7 +18,7 @@ export function StudyCard({ id, data }: StudyCardProps) {
   };
 
   return (
-    <Link href={`/study-groups/detail?id=${id}`}>
+    <Link href={`/study-groups/detail/${data.studyGroupId}`}>
       <Card className="h-full flex flex-col bg-gray-900 border-gray-800 hover:border-primary/50 transition-colors overflow-hidden group">
         <CardHeader className="pb-3">
           <div className="flex justify-between items-start mb-2">
@@ -56,17 +44,20 @@ export function StudyCard({ id, data }: StudyCardProps) {
           </div>
           <div className="flex items-center text-gray-400 gap-2">
             <Calendar className="w-4 h-4 text-primary" />
-            <span>{formatDate(data.startDate)} ~ {formatDate(data.endDate)}</span>
+            <span>{formatDate(data.createdAt)}</span>
           </div>
         </CardContent>
 
-        <CardFooter className="pt-0 border-t border-gray-800 mt-3 pt-3">
-          <div className="flex items-center text-gray-400 gap-2 w-full">
+        <CardFooter className="pt-0 border-t border-gray-800 mt-3 pt-3 flex justify-between">
+          <div className="flex items-center text-gray-400 gap-2">
              <Users className="w-4 h-4" />
              <span className="text-xs">
-               모집 인원 {data.recruitingNumber} / {data.totalNumber}
+               {data.currentMemberCount} / {data.maxMemberCount}
              </span>
-             {/* 진행률 바 같은거 추가 가능 */}
+          </div>
+          <div className="flex items-center text-gray-400 gap-1">
+            <Heart className="w-4 h-4" />
+            <span className="text-xs">{data.likeCount}</span>
           </div>
         </CardFooter>
       </Card>

@@ -27,12 +27,12 @@ import { Spinner } from "@/components/ui/spinner"; // 에러 해결: Spinner 임
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 
-// Hooks
 import { useCheckNickname, useSignup } from "@/hooks/queries/use-auth";
+import { ApiError } from "@/lib/api";
 
 // 유효성 검사 스키마
 const signupSchema = z.object({
-  kakaoUserNumber: z.string(), // 카카오 고유번호
+  kakaoUniqueId: z.string(), // 카카오 고유번호
   kakoEmail: z.string(),
   nickname: z.string().min(2, "별명은 2글자 이상이어야 합니다."),
   gender: z.enum(["MALE", "FEMALE"] as const, { message: "성별을 선택해주세요." }),
@@ -51,14 +51,13 @@ function SignupForm() {
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      kakaoUserNumber: "",
+      kakaoUniqueId: "",
       kakoEmail: "",
       nickname: "",
       gender: "MALE",
     },
   });
 
-  // 닉네임 중복 확인
   const handleCheckNickname = async (nickname: string) => {
     if (nickname.length < 2) {
       form.setError("nickname", { message: "2글자 이상 입력해주세요." });
@@ -66,20 +65,17 @@ function SignupForm() {
     }
     
     try {
-      const res = await checkNickname(nickname);
-      // API 응답이 { isDuplicate: boolean } 형태라고 가정 (HashMap)
-      const isDuplicate = res.data["isDuplicate"]; 
-      
-      if (!isDuplicate) { 
-        setIsNicknameChecked(true);
-        toast({ title: "사용 가능한 별명입니다.", className: "bg-primary text-primary-foreground" });
-        form.clearErrors("nickname");
-      } else {
+      await checkNickname(nickname);
+      setIsNicknameChecked(true);
+      toast({ title: "사용 가능한 별명입니다.", className: "bg-primary text-primary-foreground" });
+      form.clearErrors("nickname");
+    } catch (e: any) {
+      if (e instanceof ApiError && e.response.code === "U002") {
         setIsNicknameChecked(false);
-        form.setError("nickname", { message: "이미 사용 중인 별명입니다." });
+        form.setError("nickname", { message: e.message });
+      } else {
+        toast({ title: "중복 확인 중 오류가 발생했습니다.", variant: "destructive" });
       }
-    } catch (e) {
-       toast({ title: "중복 확인 중 오류가 발생했습니다.", variant: "destructive" });
     }
   };
 
@@ -95,8 +91,8 @@ function SignupForm() {
       return;
     }
 
-    const kakaoUserNumber = localStorage.getItem("kakaoUserNumber") || "";
-    if(kakaoUserNumber === "") {
+    const kakaoUniqueId = localStorage.getItem("kakaoUniqueId") || "";
+    if(kakaoUniqueId === "") {
       toast({ title: "카카오 고유번호 정보가 없습니다. 다시 시도해주세요.", variant: "destructive" });
       return;
     }
@@ -104,7 +100,7 @@ function SignupForm() {
     signup({
       ...values,
       kakaoEmail,
-      kakaoUserNumber
+      kakaoUniqueId
       // birthDate: format(values.birthDate, "yyyy-MM-dd"),
     });
   };

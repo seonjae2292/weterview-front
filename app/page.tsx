@@ -113,8 +113,8 @@ function HomeContent() {
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-6">
-              {popularData?.content.map((study: any, index: number) => (
-                <StudyCard key={index} id={study.id || String(index)} data={study} />
+              {popularData?.content.map((study) => (
+                <StudyCard key={study.studyGroupId} data={study} />
               ))}
               {popularData?.content.length === 0 && (
                 <div className="col-span-full text-center py-10 text-gray-500">
@@ -145,9 +145,8 @@ function HomeContent() {
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-6">
-              {latestData?.map((study: any, index: number) => (
-                // API 응답에 id가 없을 경우 index를 키로 사용
-                <StudyCard key={index} id={study.id || String(index)} data={study} />
+              {latestData?.map((study) => (
+                <StudyCard key={study.studyGroupId} data={study} />
               ))}
               {latestData?.length === 0 && (
                 <div className="col-span-full text-center py-10 text-gray-500">

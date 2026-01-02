@@ -50,12 +50,9 @@ export function StudyGroupForm({
       subTitle: "",
       field: "",
       location: "",
-      recruitingNumber: 0,
-      totalNumber: 0,
+      maxMemberCount: 0,
       description: "",
       schedule: "",
-      joinCondition: "",
-      contact: "",
       ...defaultValues,
     },
   });
@@ -176,22 +173,7 @@ export function StudyGroupForm({
           <div className="grid md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="recruitingNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>현재 모집된 인원</FormLabel>
-                  <FormControl>
-                    <Input type="number" min="1" placeholder="1" {...field} className="bg-black border-gray-700" />
-                  </FormControl>
-                  <FormDescription>현재 확정된 인원수를 입력하세요.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="totalNumber"
+              name="maxMemberCount"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>총 모집 인원</FormLabel>
@@ -333,34 +315,6 @@ export function StudyGroupForm({
                 <FormLabel>진행 일정</FormLabel>
                 <FormControl>
                   <Input placeholder="예) 매주 토요일 오후 2시 ~ 5시" {...field} className="bg-black border-gray-700" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="joinCondition"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>참여 조건</FormLabel>
-                <FormControl>
-                  <Input placeholder="예) 프론트엔드 개발 1년 이상, 성실하게 참여하실 분" {...field} className="bg-black border-gray-700" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="contact"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>문의 연락처</FormLabel>
-                <FormControl>
-                  <Input placeholder="오픈카톡 링크 또는 이메일 주소" {...field} className="bg-black border-gray-700" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

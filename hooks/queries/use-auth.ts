@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ApiResponse, OurMemberDto, SignupInfoDto, MyPageInfoDto } from "@/types/auth";
+import { OurMemberDto, SignupInfoDto, MyPageInfoDto, SignupResponseDto, NicknameDuplicateCheckDto } from "@/types/auth";
 import { fetcher } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { deleteAccessToken, getAccessToken, setAccessToken } from "@/lib/utils";
+import { deleteTokens, getAccessToken, setTokens } from "@/lib/utils";
 
 // 카카오 로그인 (Callback 처리)
 export const useKakaoLogin = () => {
@@ -14,7 +14,7 @@ export const useKakaoLogin = () => {
 
   return useMutation({
     mutationFn: (code: string) =>
-      fetcher<ApiResponse<OurMemberDto>>(`/oauth/kakao/callback?code=${code}`, {
+      fetcher<OurMemberDto>(`/oauth/kakao/callback?code=${code}`, {
         method: "GET",
         auth: false, // 토큰이 없으므로 인증 없이 요청
       }),
@@ -22,49 +22,43 @@ export const useKakaoLogin = () => {
       // 응답 데이터 구조 확인 로그
       console.log("Login Success Response:", response);
 
-      const { isOurMember, accessToken, kakaoEmail, kakaoUniqueId} = response.data;
-      
-      if (accessToken) setAccessToken(accessToken);
+      const { isOurMember, accessToken, refreshToken, kakaoEmail, kakaoUniqueId } = response;
 
-      if (!isOurMember) {
-        localStorage.setItem("kakaoEmail", kakaoEmail);
-        localStorage.setItem("kakaoUserNumber", kakaoUniqueId);
-
-        toast({ title: "추가 정보 입력이 필요합니다.", description: "회원가입 페이지로 이동합니다." });
-        
-        router.push("/oauth/signup");
-      } else {
+      if (isOurMember && accessToken && refreshToken) {
+        setTokens(accessToken, refreshToken);
         localStorage.removeItem("kakaoEmail");
-        localStorage.removeItem("kakaoUserNumber");
-
+        localStorage.removeItem("kakaoUniqueId");
         await queryClient.invalidateQueries({ queryKey: ["myProfile"] });
-
         toast({ title: "로그인 성공", description: "환영합니다!" });
-        
         router.push("/");
+      } else if (!isOurMember && kakaoEmail && kakaoUniqueId) {
+        localStorage.setItem("kakaoEmail", kakaoEmail);
+        localStorage.setItem("kakaoUniqueId", kakaoUniqueId);
+        toast({ title: "추가 정보 입력이 필요합니다.", description: "회원가입 페이지로 이동합니다." });
+        router.push("/oauth/signup");
       }
     },
     onError: (error: any) => {
       console.error("Kakao Login Error:", error);
-      
+
       // 이미 토큰이 있어서 400이 뜬 경우(중복 호출) 등은 무시하거나 홈으로
       // 사용자가 명확히 인지해야 할 에러만 토스트를 띄웁니다.
-      toast({ 
-        title: "로그인 처리 중 문제가 발생했습니다.", 
+      toast({
+        title: "로그인 처리 중 문제가 발생했습니다.",
         description: "다시 시도해주시거나 관리자에게 문의해주세요.",
-        variant: "destructive" 
+        variant: "destructive"
       });
-      
+
       router.push("/");
     },
   });
 };
 
-// 닉네임 중복 확인 (기존 유지)
+// 닉네임 중복 확인
 export const useCheckNickname = () => {
   return useMutation({
     mutationFn: (nickname: string) =>
-      fetcher<ApiResponse<Record<string, boolean>>>(`/oauth/verify/duplicate/nickname?nickname=${nickname}`, {
+      fetcher<NicknameDuplicateCheckDto>(`/oauth/verify/duplicate/nickname?nickname=${nickname}`, {
         method: "GET",
         auth: false,
       }),
@@ -78,14 +72,15 @@ export const useSignup = () => {
 
   return useMutation({
     mutationFn: (data: SignupInfoDto) =>
-      fetcher<ApiResponse<any>>("/oauth/signup", {
+      fetcher<SignupResponseDto>("/oauth/signup", {
         method: "POST",
         auth: false,
         body: JSON.stringify(data),
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setTokens(data.accessToken, data.refreshToken);
       localStorage.removeItem("kakaoEmail");
-      localStorage.removeItem("kakaoUserNumber");
+      localStorage.removeItem("kakaoUniqueId");
       toast({ title: "회원가입 완료! 환영합니다." });
       router.push("/");
     },
@@ -103,16 +98,16 @@ export const useMyProfile = () => {
     queryFn: async () => {
       // 1. 함수 내부에서 토큰 확인
       const token = getAccessToken();
-      
+
       if (!token) {
         return null;
       }
 
-      const response = await fetcher<ApiResponse<MyPageInfoDto>>("/mypage/info", {
+      const response = await fetcher<MyPageInfoDto>("/mypage/info", {
         method: "GET",
         auth: true,
       });
-      return response.data;
+      return response;
     },
     retry: 0,
   });
@@ -125,10 +120,10 @@ export const useLogout = () => {
   const { toast } = useToast();
 
   const logout = () => {
-    deleteAccessToken();
+    deleteTokens();
     localStorage.removeItem("kakaoEmail");
-    localStorage.removeItem("kakaoUserNumber");
-    
+    localStorage.removeItem("kakaoUniqueId");
+
     // 유저 데이터 캐시 즉시 삭제 (UI 즉시 반영을 위해)
     queryClient.setQueryData(["myProfile"], null);
     queryClient.invalidateQueries({ queryKey: ["myProfile"] });

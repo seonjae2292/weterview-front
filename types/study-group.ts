@@ -14,39 +14,36 @@ export interface PageResponse<T> {
 
 // 목록 조회용 아이템 (GetStudyGroupPageRes)
 export interface StudyGroupItemDto {
-  id?: number | string; // 백엔드 DTO 확인 필요, 없을 경우 대비
+  studyGroupId: number;
   field: string;
   status: string;
   title: string;
   subTitle: string;
   location: string;
-  description: string;
-  recruitingNumber: number;
-  totalNumber: number;
-  startDate: string;
-  endDate: string;
+  currentMemberCount: number;
+  maxMemberCount: number;
+  likeCount: number;
+  createdAt: string;
 }
 
 // 상세 조회용 (GetStudyGroupByIdRes / GetStudyGroupDetailRes)
 export interface StudyGroupDetailDto {
-  id: string;
-  field: string;
-  status: string;
+  studyGroupId: number;
+  writerNickname: string;
+  writerProfileImageUrl: string;
   title: string;
   subTitle: string;
-  recruitingNumber: number;
-  isLiked: boolean;
-  totalNumber: number;
+  field: string;
+  location: string;
+  status: string;
+  currentMemberCount: number;
+  maxMemberCount: number;
   startDate: string;
   endDate: string;
-  location: string;
   description: string;
   schedule: string;
-  joinCondition: string;
-  contact: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
+  isLiked: boolean;
+  isOwner: boolean;
 }
 
 // 댓글 (GetCommentRes)
@@ -66,15 +63,12 @@ export interface CreateStudyGroupSchema {
   field: string;        // Enum
   title: string;
   subTitle: string;
-  recruitingNumber: number;
-  totalNumber: number;
+  maxMemberCount: number;
   startDate: Date;      // Date 객체로 관리하다가 API 전송 시 ISO String 변환
   endDate: Date;
   location: string;     // Enum
   description: string;
   schedule: string;
-  joinCondition: string;
-  contact: string;
 }
 
 // 스터디 생성 요청 (CreateStudyGroupReq)
@@ -82,15 +76,12 @@ export interface CreateStudyGroupReq {
   field: string;
   title: string;
   subTitle: string;
-  recruitingNumber: number;
-  totalNumber: number;
-  startDate: string; // yyyy-MM-ddTHH:mm:ss
-  endDate: string;   // yyyy-MM-ddTHH:mm:ss
-  location: string;
   description: string;
+  location: string;
   schedule: string;
-  joinCondition: string;
-  contact: string;
+  maxMemberCount: number;
+  startDate: string; // yyyy-MM-dd
+  endDate: string;   // yyyy-MM-dd
 }
 
 // 검색 파라미터
@@ -128,9 +119,7 @@ export interface PageResponse<T> {
 export interface StudyApplicantDto {
   userId: number;
   nickname: string;
-  kakaoEmail: string; // 연락처 대용
-  createdAt: string;
-  status: "APPLY" | "ACCEPT" | "REFUSE";
+  appliedAt: string;
 }
 
 // 수정용 DTO (기존 CreateStudyGroupReq와 유사하지만 status 포함 가능)

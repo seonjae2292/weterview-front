@@ -47,33 +47,25 @@ export default function ManageApplicantsPage({ params }: { params: { id: string 
                     </Avatar>
                     <div>
                       <p className="font-bold">{applicant.nickname}</p>
-                      <p className="text-xs text-gray-500">{format(new Date(applicant.createdAt), "yyyy-MM-dd")} 신청</p>
+                      <p className="text-xs text-gray-500">{format(new Date(applicant.appliedAt), "yyyy-MM-dd")} 신청</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {applicant.status === "APPLY" ? (
-                      <>
-                        <Button 
-                          size="sm" 
-                          className="bg-green-600 hover:bg-green-700"
-                          onClick={() => manage({ userId: applicant.userId, studyGroupId: studyGroupId, action: "accept" })}
-                        >
-                          <Check className="w-4 h-4 mr-1" /> 수락
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="destructive"
-                          onClick={() => manage({ userId: applicant.userId, studyGroupId: studyGroupId, action: "reject" })}
-                        >
-                          <X className="w-4 h-4 mr-1" /> 거절
-                        </Button>
-                      </>
-                    ) : (
-                      <Badge variant={applicant.status === "ACCEPT" ? "default" : "destructive"}>
-                        {applicant.status === "ACCEPT" ? "수락됨" : "거절됨"}
-                      </Badge>
-                    )}
+                    <Button 
+                      size="sm" 
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={() => manage({ membershipId: applicant.userId, action: "accept" })}
+                    >
+                      <Check className="w-4 h-4 mr-1" /> 수락
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="destructive"
+                      onClick={() => manage({ membershipId: applicant.userId, action: "reject" })}
+                    >
+                      <X className="w-4 h-4 mr-1" /> 거절
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
