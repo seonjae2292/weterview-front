@@ -44,15 +44,14 @@ export interface ApiResponse<T = any> {
 }
 
 export interface OurMemberDto {
-  isOurMember: boolean;
+  ourMember: boolean;
   accessToken?: string;
-  refreshToken?: string;
   kakaoEmail?: string;
-  kakaoUniqueId?: string;
+  kakaoUserNumber?: string;
 }
 
 export interface SignupInfoDto {
-  kakaoUniqueId: string;
+  kakaoUserNumber: string;
   kakaoEmail: string;
   nickname: string;
   gender: "MALE" | "FEMALE";
@@ -68,12 +67,10 @@ export interface MyPageInfoDto {
 export interface LoginResponseDto {
   isOurMember: boolean;
   accessToken: string;
-  refreshToken: string;
 }
 
 export interface SignupResponseDto {
   accessToken: string;
-  refreshToken: string;
 }
 
 // 닉네임 중복 확인 응답 타입

@@ -94,12 +94,12 @@ export interface StudyGroupSearchParams {
   status?: string;
 }
 
-export interface StudyGroupLikeParams{
+export interface StudyGroupLikeParams {
   pageNumber: number;
   pageSize: number;
 }
 
-export interface StudyGroupCommentedParams{
+export interface StudyGroupCommentedParams {
   pageNumber: number;
   pageSize: number;
 }

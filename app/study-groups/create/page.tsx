@@ -19,8 +19,6 @@ export default function CreateStudyGroupPage() {
       endDate: formatDateTime(values.endDate),
     };
 
-    console.log(requestBody.startDate, requestBody.endDate);
-
     createStudyGroup(requestBody);
   };
 

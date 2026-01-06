@@ -52,6 +52,7 @@ export function StudyGroupForm({
       location: "",
       maxMemberCount: 0,
       description: "",
+      joinCondition: "",
       schedule: "",
       ...defaultValues,
     },
@@ -89,7 +90,7 @@ export function StudyGroupForm({
               )}
             />
           )}
-          
+
           <FormField
             control={form.control}
             name="title"
@@ -169,7 +170,7 @@ export function StudyGroupForm({
 
         <div className="space-y-6 mt-8">
           <h3 className="text-xl font-semibold border-b border-gray-800 pb-2">모집 정보</h3>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
@@ -296,10 +297,28 @@ export function StudyGroupForm({
               <FormItem>
                 <FormLabel>스터디 소개</FormLabel>
                 <FormControl>
-                  <Textarea 
-                    placeholder="스터디의 목표, 커리큘럼 등을 자세히 적어주세요." 
-                    className="bg-black border-gray-700 min-h-[150px]" 
-                    {...field} 
+                  <Textarea
+                    placeholder="스터디의 목표, 커리큘럼 등을 자세히 적어주세요."
+                    className="bg-black border-gray-700 min-h-[150px]"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="joinCondition"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>참여 조건</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="스터디에 참여할 수 있는 조건을 적어주세요."
+                    className="bg-black border-gray-700 min-h-[150px]"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />

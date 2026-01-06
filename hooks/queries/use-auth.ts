@@ -4,6 +4,7 @@ import { fetcher } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { deleteTokens, getAccessToken, setTokens } from "@/lib/utils";
+import { queryClient } from '@/lib/query-client'
 
 // 카카오 로그인 (Callback 처리)
 export const useKakaoLogin = () => {
@@ -19,21 +20,18 @@ export const useKakaoLogin = () => {
         auth: false, // 토큰이 없으므로 인증 없이 요청
       }),
     onSuccess: async (response) => {
-      // 응답 데이터 구조 확인 로그
-      console.log("Login Success Response:", response);
+      const { ourMember, accessToken, kakaoEmail, kakaoUserNumber } = response;
 
-      const { isOurMember, accessToken, refreshToken, kakaoEmail, kakaoUniqueId } = response;
-
-      if (isOurMember && accessToken && refreshToken) {
-        setTokens(accessToken, refreshToken);
+      if (ourMember && accessToken) {
+        setTokens(accessToken);
         localStorage.removeItem("kakaoEmail");
-        localStorage.removeItem("kakaoUniqueId");
+        localStorage.removeItem("kakaoUserNumber");
         await queryClient.invalidateQueries({ queryKey: ["myProfile"] });
         toast({ title: "로그인 성공", description: "환영합니다!" });
         router.push("/");
-      } else if (!isOurMember && kakaoEmail && kakaoUniqueId) {
+      } else if (!ourMember && kakaoEmail && kakaoUserNumber) {
         localStorage.setItem("kakaoEmail", kakaoEmail);
-        localStorage.setItem("kakaoUniqueId", kakaoUniqueId);
+        localStorage.setItem("kakaoUserNumber", kakaoUserNumber);
         toast({ title: "추가 정보 입력이 필요합니다.", description: "회원가입 페이지로 이동합니다." });
         router.push("/oauth/signup");
       }
@@ -77,11 +75,12 @@ export const useSignup = () => {
         auth: false,
         body: JSON.stringify(data),
       }),
-    onSuccess: (data) => {
-      setTokens(data.accessToken, data.refreshToken);
+    onSuccess: async (data) => {
+      setTokens(data.accessToken);
       localStorage.removeItem("kakaoEmail");
-      localStorage.removeItem("kakaoUniqueId");
+      localStorage.removeItem("kakaoUserNumber");
       toast({ title: "회원가입 완료! 환영합니다." });
+      await queryClient.invalidateQueries({ queryKey: ["myProfile"] });
       router.push("/");
     },
     onError: (error) => {
@@ -122,7 +121,7 @@ export const useLogout = () => {
   const logout = () => {
     deleteTokens();
     localStorage.removeItem("kakaoEmail");
-    localStorage.removeItem("kakaoUniqueId");
+    localStorage.removeItem("kakaoUserNumber");
 
     // 유저 데이터 캐시 즉시 삭제 (UI 즉시 반영을 위해)
     queryClient.setQueryData(["myProfile"], null);

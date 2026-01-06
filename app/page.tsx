@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { 
-  useGetStudyGroups, 
-  usePopularStudyGroups, 
-  useLatestStudyGroups } from "@/hooks/queries/use-study-group";
+import {
+  useGetStudyGroups,
+  usePopularStudyGroups,
+  useLatestStudyGroups
+} from "@/hooks/queries/use-study-group";
 import { StudyCard } from "@/components/study-group/study-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
@@ -23,12 +24,6 @@ function HomeContent() {
   const searchParams = useSearchParams(); // 여기서 사용 중
   const router = useRouter();
 
-  // 최신 스터디 조회 (1페이지, 6개)
-  const { data: recentData, isLoading: isRecentLoading } = useGetStudyGroups({
-    pageNumber: 1,
-    pageSize: 6,
-  });
-
   const { data: popularData, isLoading: isPopularLoading } = usePopularStudyGroups({
     pageNumber: 1,
     pageSize: 3,
@@ -37,7 +32,7 @@ function HomeContent() {
   const { data: latestData, isLoading: isLatestLoading } = useLatestStudyGroups({
     count: 3
   })
-  
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) {
@@ -105,7 +100,7 @@ function HomeContent() {
             <Sparkles className="text-yellow-500 w-6 h-6" />
             <h2 className="text-2xl font-bold">지금 뜨는 스터디</h2>
           </div>
-            {isPopularLoading ? (
+          {isPopularLoading ? (
             <div className="grid md:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
                 <Skeleton key={i} className="h-[280px] rounded-xl bg-gray-900" />
@@ -136,7 +131,7 @@ function HomeContent() {
               전체보기 <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          
+
           {isLatestLoading ? (
             <div className="grid md:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (

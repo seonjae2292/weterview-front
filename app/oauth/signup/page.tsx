@@ -32,7 +32,7 @@ import { ApiError } from "@/lib/api";
 
 // 유효성 검사 스키마
 const signupSchema = z.object({
-  kakaoUniqueId: z.string(), // 카카오 고유번호
+  kakaoUserNumber: z.string(), // 카카오 고유번호
   kakoEmail: z.string(),
   nickname: z.string().min(2, "별명은 2글자 이상이어야 합니다."),
   gender: z.enum(["MALE", "FEMALE"] as const, { message: "성별을 선택해주세요." }),
@@ -42,16 +42,16 @@ const signupSchema = z.object({
 function SignupForm() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  
+
   const { mutate: signup, isPending: isSigningUp } = useSignup();
   const { mutateAsync: checkNickname, isPending: isCheckingNickname } = useCheckNickname();
-  
+
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      kakaoUniqueId: "",
+      kakaoUserNumber: "",
       kakoEmail: "",
       nickname: "",
       gender: "MALE",
@@ -63,7 +63,7 @@ function SignupForm() {
       form.setError("nickname", { message: "2글자 이상 입력해주세요." });
       return;
     }
-    
+
     try {
       await checkNickname(nickname);
       setIsNicknameChecked(true);
@@ -86,21 +86,21 @@ function SignupForm() {
     }
 
     const kakaoEmail = localStorage.getItem("kakaoEmail") || "";
-    if(kakaoEmail === "") {
+    if (kakaoEmail === "") {
       toast({ title: "카카오 이메일 정보가 없습니다. 다시 시도해주세요.", variant: "destructive" });
       return;
     }
 
-    const kakaoUniqueId = localStorage.getItem("kakaoUniqueId") || "";
-    if(kakaoUniqueId === "") {
+    const kakaoUserNumber = localStorage.getItem("kakaoUserNumber") || "";
+    if (kakaoUserNumber === "") {
       toast({ title: "카카오 고유번호 정보가 없습니다. 다시 시도해주세요.", variant: "destructive" });
       return;
     }
-    
+
     signup({
       ...values,
       kakaoEmail,
-      kakaoUniqueId
+      kakaoUserNumber
       // birthDate: format(values.birthDate, "yyyy-MM-dd"),
     });
   };
@@ -124,18 +124,18 @@ function SignupForm() {
                   <FormLabel>별명</FormLabel>
                   <div className="flex gap-2">
                     <FormControl>
-                      <Input 
-                        placeholder="토스매니아" 
-                        {...field} 
+                      <Input
+                        placeholder="토스매니아"
+                        {...field}
                         onChange={(e) => {
                           field.onChange(e);
                           setIsNicknameChecked(false);
                         }}
                       />
                     </FormControl>
-                    <Button 
-                      type="button" 
-                      variant="secondary" 
+                    <Button
+                      type="button"
+                      variant="secondary"
                       disabled={isCheckingNickname}
                       onClick={() => handleCheckNickname(field.value)}
                     >
@@ -147,53 +147,6 @@ function SignupForm() {
                 </FormItem>
               )}
             />
-
-            {/* TODO 생년월일 (Calendar) */}
-            {/* <FormField
-              control={form.control}
-              name="birthDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>생년월일</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>날짜를 선택하세요</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                        // 에러 해결: react-day-picker v9에서는 'dropdown' 사용
-                        captionLayout="dropdown" 
-                        fromYear={1900}
-                        toYear={new Date().getFullYear()}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
 
             {/* 성별 */}
             <FormField

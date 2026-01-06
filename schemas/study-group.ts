@@ -9,6 +9,7 @@ export const studyGroupSchema = z.object({
   startDate: z.date({ error: "시작일을 선택해주세요." }),
   endDate: z.date({ error: "종료일을 선택해주세요." }),
   description: z.string().min(10, "상세 설명은 10자 이상 입력해주세요."),
+  joinCondition: z.string().min(10, "참여 조건은 10자 이상 입력해주세요."),
   schedule: z.string().min(2, "진행 일정을 입력해주세요."),
   status: z.string().optional(),
 }).refine(data => {

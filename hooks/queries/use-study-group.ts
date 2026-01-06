@@ -22,15 +22,16 @@ export const useCreateStudyGroup = () => {
 
   return useMutation({
     mutationFn: (data: CreateStudyGroupReq) =>
-      fetcher<{ studyGroupId: number }>("/studygroup/create", {
+      fetcher<{ id: number }>("/studygroup/create", {
         method: "POST",
         auth: true,
         body: JSON.stringify(data)
       }),
     onSuccess: (data) => {
       toast({ title: "스터디가 개설되었습니다." });
+      console.log(data);
       queryClient.invalidateQueries({ queryKey: ["studyGroups"] });
-      router.push(`/study-groups/detail/${data.studyGroupId}`);
+      // router.push(`/study-groups/detail/${data.id}`);
     },
     onError: (err) => toast({ title: "개설 실패", description: err.message, variant: "destructive" })
   });
