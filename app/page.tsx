@@ -109,7 +109,7 @@ function HomeContent() {
           ) : (
             <div className="grid md:grid-cols-3 gap-6">
               {popularData?.content.map((study) => (
-                <StudyCard key={study.studyGroupId} data={study} />
+                <StudyCard key={study.id} data={study} />
               ))}
               {popularData?.content.length === 0 && (
                 <div className="col-span-full text-center py-10 text-gray-500">
@@ -141,7 +141,7 @@ function HomeContent() {
           ) : (
             <div className="grid md:grid-cols-3 gap-6">
               {latestData?.map((study) => (
-                <StudyCard key={study.studyGroupId} data={study} />
+                <StudyCard key={study.id} data={study} />
               ))}
               {latestData?.length === 0 && (
                 <div className="col-span-full text-center py-10 text-gray-500">

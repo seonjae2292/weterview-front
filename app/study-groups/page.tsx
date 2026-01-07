@@ -95,7 +95,7 @@ export default function StudyGroupListPage() {
         ) : (
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
              {data?.content.map((study, index) => (
-               <StudyCard key={study.studyGroupId} data={study} />
+               <StudyCard key={study.id} data={study} />
              ))}
              
              {data?.content.length === 0 && (

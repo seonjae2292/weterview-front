@@ -31,6 +31,7 @@ export const useCreateStudyGroup = () => {
       toast({ title: "스터디가 개설되었습니다." });
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["studyGroups"] });
+      router.push(`/study-groups/detail/${data.id}`);
       // router.push(`/study-groups/detail/${data.id}`);
     },
     onError: (err) => toast({ title: "개설 실패", description: err.message, variant: "destructive" })
@@ -57,7 +58,7 @@ export const useGetStudyGroups = (params: StudyGroupSearchParams) => {
 
       const res = await fetcher<PageResponse<StudyGroupItemDto>>(
         `/studygroup/get?${query.toString()}`,
-        { method: "GET", auth: false }, // 목록 조회는 토큰 없이 가능
+        { method: "GET", auth: true },
       );
       return res;
     },

@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { CommentSection } from "@/components/study-group/comment-section";
 import { FIELD_LABEL, LOCATION_LABEL, STATUS_LABEL, STATUS_COLOR } from "@/constants/enums";
 import { Calendar, MapPin, Users, Heart, ArrowLeft, User } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -17,8 +17,8 @@ import { useState, Suspense, useEffect } from "react";
 
 function StudyDetailContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const studyGroupId = searchParams.get("id"); // 쿼리 파라미터에서 ID 추출
+  const params = useParams();
+  const studyGroupId = params.id as string;
   
   const { data: study, isLoading } = useGetStudyGroupDetail(studyGroupId || "");
   const { mutate: joinStudy } = useJoinStudyGroup();
@@ -86,9 +86,9 @@ function StudyDetailContent() {
         <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">{study.title}</h1>
         <p className="text-xl text-gray-400">{study.subTitle}</p>
         <div className="mt-4 flex items-center gap-3">
-          <Avatar>
+          {/* <Avatar>
             <AvatarFallback>{study.writerNickname.slice(0, 2)}</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
           <span className="font-medium">{study.writerNickname}</span>
         </div>
       </div>

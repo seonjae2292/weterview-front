@@ -11,6 +11,7 @@ interface StudyCardProps {
 }
 
 export function StudyCard({ data }: StudyCardProps) {
+
   // 날짜 포맷팅 (YYYY-MM-DD)
   const formatDate = (dateStr: string) => {
     try { return format(new Date(dateStr), "yyyy-MM-dd"); } 
@@ -18,7 +19,7 @@ export function StudyCard({ data }: StudyCardProps) {
   };
 
   return (
-    <Link href={`/study-groups/detail/${data.studyGroupId}`}>
+    <Link href={`/study-groups/detail/${data.id}`}>
       <Card className="h-full flex flex-col bg-gray-900 border-gray-800 hover:border-primary/50 transition-colors overflow-hidden group">
         <CardHeader className="pb-3">
           <div className="flex justify-between items-start mb-2">

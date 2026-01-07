@@ -14,7 +14,7 @@ export interface PageResponse<T> {
 
 // 목록 조회용 아이템 (GetStudyGroupPageRes)
 export interface StudyGroupItemDto {
-  studyGroupId: number;
+  id: number;
   field: string;
   status: string;
   title: string;
