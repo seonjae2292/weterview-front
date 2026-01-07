@@ -29,10 +29,8 @@ export const useCreateStudyGroup = () => {
       }),
     onSuccess: (data) => {
       toast({ title: "스터디가 개설되었습니다." });
-      console.log(data);
       queryClient.invalidateQueries({ queryKey: ["studyGroups"] });
       router.push(`/study-groups/detail/${data.id}`);
-      // router.push(`/study-groups/detail/${data.id}`);
     },
     onError: (err) => toast({ title: "개설 실패", description: err.message, variant: "destructive" })
   });
