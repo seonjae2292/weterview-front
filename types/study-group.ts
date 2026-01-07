@@ -28,9 +28,7 @@ export interface StudyGroupItemDto {
 
 // 상세 조회용 (GetStudyGroupByIdRes / GetStudyGroupDetailRes)
 export interface StudyGroupDetailDto {
-  studyGroupId: number;
-  writerNickname: string;
-  writerProfileImageUrl: string;
+  id: number;
   title: string;
   subTitle: string;
   field: string;
@@ -38,12 +36,13 @@ export interface StudyGroupDetailDto {
   status: string;
   currentMemberCount: number;
   maxMemberCount: number;
+  joinCondition: string;
   startDate: string;
   endDate: string;
   description: string;
-  schedule: string;
   isLiked: boolean;
-  isOwner: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // 댓글 (GetCommentRes)

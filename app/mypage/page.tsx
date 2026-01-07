@@ -115,19 +115,19 @@ export default function MyPage() {
                {isHostedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
                    {hostedGroups?.content.map((group: StudyGroupItemDto) => (
-                     <div key={group.studyGroupId} className="relative group">
+                     <div key={group.id} className="relative group">
                        <StudyCard data={group} />
                        {/* Hover 시 나타나는 관리 버튼 */}
                        <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                           <Button size="icon" variant="secondary" onClick={(e) => {
                             e.preventDefault();
-                            router.push(`/study-groups/${group.studyGroupId}/edit`);
+                            router.push(`/study-groups/${group.id}/edit`);
                           }}>
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button size="icon" variant="secondary" onClick={(e) => {
                             e.preventDefault();
-                            router.push(`/study-groups/${group.studyGroupId}/manage`);
+                            router.push(`/study-groups/${group.id}/manage`);
                           }}>
                             <Users className="w-4 h-4" />
                           </Button>
@@ -144,7 +144,7 @@ export default function MyPage() {
                {isJoinedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
                    {joinedGroups?.content.map((group: StudyGroupItemDto) => (
-                     <StudyCard key={group.studyGroupId} data={group} />
+                     <StudyCard key={group.id} data={group} />
                    ))}
                    {joinedGroups?.content.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">참여한 스터디가 없습니다.</p>}
                  </div>
@@ -156,7 +156,7 @@ export default function MyPage() {
                {isLikedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
                    {likedGroups?.content.map((group: StudyGroupItemDto) => (
-                     <StudyCard key={group.studyGroupId} data={group} />
+                     <StudyCard key={group.id} data={group} />
                    ))}
                    {likedGroups?.content.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">찜한 스터디가 없습니다.</p>}
                  </div>
@@ -168,7 +168,7 @@ export default function MyPage() {
                {isCommentedLoading ? <Skeleton className="h-40 bg-gray-900"/> : (
                  <div className="grid md:grid-cols-2 gap-4">
                    {commentedGroups?.content.map((group: StudyGroupItemDto) => (
-                     <StudyCard key={group.studyGroupId} data={group} />
+                     <StudyCard key={group.id} data={group} />
                    ))}
                    {commentedGroups?.content.length === 0 && <p className="text-gray-500 col-span-2 text-center py-10">댓글을 남긴 스터디가 없습니다.</p>}
                  </div>
