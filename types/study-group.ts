@@ -119,6 +119,10 @@ export interface StudyApplicantDto {
   userId: number;
   nickname: string;
   appliedAt: string;
+  kakaoUserNumber: string,
+  kakaoEmail: string,
+  gender: string,
+  status: string                
 }
 
 // 수정용 DTO (기존 CreateStudyGroupReq와 유사하지만 status 포함 가능)

@@ -78,7 +78,7 @@ export const useGetApplicants = (studyGroupId: string) => {
     queryKey: ["applicants", studyGroupId],
     queryFn: async () => {
       // 백엔드 수정 전이라도 일단 호출 구조 마련
-      const res = await fetcher<StudyApplicantDto[]>(`/mypage/applied/list/${studyGroupId}`, { auth: true });
+      const res = await fetcher<PageResponse<StudyApplicantDto[]>>(`/mypage/applied/list/${studyGroupId}`, { auth: true });
       return res;
     },
     enabled: !!studyGroupId,

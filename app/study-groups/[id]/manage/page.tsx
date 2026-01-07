@@ -5,10 +5,7 @@ import { useGetStudyGroupDetail } from "@/hooks/queries/use-study-group";
 import { useGetApplicants, useManageApplicant } from "@/hooks/queries/use-mypage"; // 훅 위치 확인 필요
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
+import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -35,10 +32,10 @@ export default function ManageApplicantsPage({ params }: { params: { id: string 
         </div>
 
         <div className="space-y-4">
-          {applicants?.length === 0 ? (
+          {applicants?.content.length === 0 ? (
              <div className="text-center py-10 text-gray-500 bg-gray-900 rounded-lg">아직 신청자가 없습니다.</div>
           ) : (
-            applicants?.map((applicant) => (
+            applicants?.content.map((applicant: any) => (
               <Card key={applicant.userId} className="bg-gray-900 border-gray-800">
                 <CardContent className="flex items-center justify-between p-6">
                   <div className="flex items-center gap-4">
@@ -47,7 +44,8 @@ export default function ManageApplicantsPage({ params }: { params: { id: string 
                     </Avatar>
                     <div>
                       <p className="font-bold">{applicant.nickname}</p>
-                      <p className="text-xs text-gray-500">{format(new Date(applicant.appliedAt), "yyyy-MM-dd")} 신청</p>
+                      {/* TODO 신청 요청한 날짜 추가하기 */}
+                      {/* <p className="text-xs text-gray-500">{format(new Date(applicant.appliedAt), "yyyy-MM-dd")} 신청</p> */}
                     </div>
                   </div>
 
@@ -55,14 +53,14 @@ export default function ManageApplicantsPage({ params }: { params: { id: string 
                     <Button 
                       size="sm" 
                       className="bg-green-600 hover:bg-green-700"
-                      onClick={() => manage({ membershipId: applicant.userId, action: "accept" })}
+                      onClick={() => manage({ userId: applicant.userId, action: "accept" })}
                     >
                       <Check className="w-4 h-4 mr-1" /> 수락
                     </Button>
                     <Button 
                       size="sm" 
                       variant="destructive"
-                      onClick={() => manage({ membershipId: applicant.userId, action: "reject" })}
+                      onClick={() => manage({ userId: applicant.userId, action: "reject" })}
                     >
                       <X className="w-4 h-4 mr-1" /> 거절
                     </Button>
